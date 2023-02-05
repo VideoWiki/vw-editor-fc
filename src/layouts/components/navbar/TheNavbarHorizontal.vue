@@ -33,7 +33,7 @@
 
         <!--      <notification-drop-down />-->
         <profile-drop-down v-if="isUserLoggedIn()" />
-        <vs-button v-else color="primary" href="/login" type="filled"
+        <vs-button v-else color="primary" href="/login/restricted" type="filled"
           >Sign In</vs-button
         >
       </vs-navbar>

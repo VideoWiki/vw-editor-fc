@@ -7,7 +7,11 @@
       >
         <div class="p-2">
           <vs-button @click="getMedia">{{ $t('studio.voice.v1') }}</vs-button>
-          <video :src="this.audio" v-if="this.audio !== ''"></video>
+          <video
+            crossorigin="anonymous"
+            :src="this.audio"
+            v-if="this.audio !== ''"
+          ></video>
         </div>
 
         <div class="p-2">

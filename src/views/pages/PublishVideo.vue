@@ -149,12 +149,6 @@
             src="https://forkast.news/wp-content/uploads/2021/12/polygon-768x432.jpg"
           />
         </button>
-        <button class="btn cursor-pointer" @click="polyScan('filebase')">
-          <img
-            class="img"
-            src="https://www.vectorlogo.zone/logos/filecoinio/filecoinio-ar21.svg"
-          />
-        </button>
       </div>
       <!--vs-divider /-->
     </vs-popup>
@@ -570,6 +564,7 @@ export default {
             video: videoPayload,
             description: this.videoData.description,
             title: this.videoData.title,
+            speed: this.duration > 299 ? 10 : 5,
             name: name,
             walletAddress,
             avatar: avatar.url,
@@ -660,11 +655,6 @@ export default {
       const studioState = this.$store.state.studio;
       const data = {
         user_id: this.usersData.id,
-        user_name: this.usersData.first_name + ' ' + this.usersData.last_name,
-        email: this.usersData.email,
-        first_name: this.usersData.first_name,
-        last_name: this.usersData.last_name,
-        profile_pic: this.usersData.profile_pic,
         ...this.videoData,
         duration: document.getElementById('preview_video').duration,
         scenes: this.getSceneData(studioState),
@@ -838,7 +828,7 @@ export default {
     },
     selecetPublish() {
       if (this.accountAddress) {
-        this.publishMode = true;
+        this.polyScan('filebase');
         return;
       }
       this.$vs.notify({
@@ -878,39 +868,32 @@ export default {
       }
     },
     async polyScan(type) {
-      let url;
-
-      if (type === 'none' && window.ethereum.networkVersion !== '80001') {
-        await this.switchNetwork(80001);
-      } else if (
-        type === 'filebase' &&
-        window.ethereum.networkVersion !== '3141'
-      ) {
+      if (window.ethereum.networkVersion !== '3141') {
         await this.switchNetwork(3141);
       }
       this.publishMode = false;
       const walletAddress = this.$store.state.accountAddress;
       this.$vs.loading();
-      try {
-        await this.$store
-          .dispatch('initialiseBundlr', this.videoData.url)
-          .then((res) => {
-            url = res;
-          });
-      } catch (e) {
-        console.log('response', JSON.stringify(e.reason));
-        this.$vs.notify({
-          title: 'Interrupted',
-          text: e.reason,
-          color: 'danger',
-        });
-        this.$vs.loading.close();
-        return;
-      }
-      url = await this.$store.dispatch('load', {
+      // try {
+      //   await this.$store
+      //     .dispatch('initialiseBundlr', this.videoData.url)
+      //     .then((res) => {
+      //       url = res;
+      //     });
+      // } catch (e) {
+      //   console.log('response', JSON.stringify(e.reason));
+      //   this.$vs.notify({
+      //     title: 'Interrupted',
+      //     text: e.reason,
+      //     color: 'danger',
+      //   });
+      //   this.$vs.loading.close();
+      //   return;
+      // }
+      const url = await this.$store.dispatch('load', {
         description: this.videoData.description,
         title: this.videoData.title,
-        url: url,
+        url: this.$store.state.studio.video.url,
       });
       if (!url) {
         this.$vs.notify({
@@ -934,6 +917,7 @@ export default {
             video: videoPayload,
             description: this.videoData.description,
             title: this.videoData.title,
+            speed: this.duration > 299 ? 10 : 5,
             name: name,
             walletAddress,
             avatar: avatar.url,
@@ -944,7 +928,6 @@ export default {
             walletAddress: this.$store.state.accountAddress,
             type,
           });
-          console.log('VideoPublished', VideoPublished);
           if (VideoPublished) {
             setTimeout(async () => {
               this.showTransactionModal = false;

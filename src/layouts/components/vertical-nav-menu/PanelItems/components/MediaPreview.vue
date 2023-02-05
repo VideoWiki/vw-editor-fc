@@ -5,6 +5,7 @@
     </template>
     <template v-else>
       <video
+        crossorigin="anonymous"
         width="100%"
         height="auto"
         :src="src"

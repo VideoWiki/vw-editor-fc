@@ -36,7 +36,7 @@
       />
 
       <a
-        href="http://fider.video.wiki/"
+        href="https://fider.video.wiki/"
         class="text-black mr-5 ml-8"
         target="_parent"
       >

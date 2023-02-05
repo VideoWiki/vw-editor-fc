@@ -173,10 +173,6 @@ export default {
       this.$vs.loading.close('#div-with-loading > .con-vs-loading');
       this.isLoading = false;
       this.videoList = apiResponse.results;
-      setTimeout(() => {
-        console.log(this.$refs['pagination']);
-        delete this.$refs['pagination'].$children[0].$children[0];
-      }, 1000);
       if (apiResponse.count % 15) {
         this.pageCount = Math.floor(apiResponse.count / 15) + 1;
       } else {
@@ -291,7 +287,7 @@ export default {
             .then((response) => response.json())
             .then((data) => {
               console.log(data);
-              this.$refs.link.setAttribute('href', uri + 'metadata.json');
+              this.$refs.link.setAttribute('href', data.url);
               console.log(this.$refs.link);
 
               this.$refs.link.click();
@@ -307,7 +303,7 @@ export default {
             .then((response) => response.json())
             .then((data) => {
               console.log(data);
-              this.$refs.link.setAttribute('href', uri + 'metadata.json');
+              this.$refs.link.setAttribute('href', data.url);
               console.log(this.$refs.link);
 
               this.$refs.link.click();

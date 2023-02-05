@@ -10,14 +10,7 @@
           <div
             v-for="(status, action, idx) in actionList"
             :key="idx"
-            class="
-              no-border
-              relative
-              font-medium
-              flex
-              items-center
-              timeline-view
-            "
+            class="no-border relative font-medium flex items-center timeline-view"
           >
             <vs-icon
               :icon="status ? 'done' : 'clear'"
@@ -32,10 +25,10 @@
         </div>
         <div class="text-left mb-2 mt-6">
           <div>
-            <h6 class="mb-2">{{ $t('PublishPanel.title') }}</h6>
-            <span class="text-danger text-sm" v-show="errors.has('title2')">{{
-              $t('PublishPanel.field_require')
-            }}</span>
+            <h6 class="mb-2">{{$t('PublishPanel.title')}}</h6>
+            <span class="text-danger text-sm" v-show="errors.has('title2')"
+              >{{$t('PublishPanel.field_require')}}</span
+            >
           </div>
           <input
             v-model="title"
@@ -47,10 +40,10 @@
         </div>
         <div class="text-left mb-2">
           <div>
-            <h6 class="mb-2">{{ $t('PublishPanel.description') }}</h6>
-            <span class="text-danger text-sm" v-show="errors.has('desc')">{{
-              $t('PublishPanel.field_require')
-            }}</span>
+            <h6 class="mb-2">{{$t('PublishPanel.description')}}</h6>
+            <span class="text-danger text-sm" v-show="errors.has('desc')"
+              >{{$t('PublishPanel.field_require')}}</span
+            >
           </div>
           <textarea
             v-model="description"
@@ -61,20 +54,36 @@
           />
         </div>
         <div class="flex items-center mt-4" v-if="!insideIframe">
-          <span v-if="teamsInitialized === true"></span>
 
-          <label v-else for="paid-status" class="mr-2"
-            ><h6>{{ $t('PublishPanel.video_access') }}</h6></label
-          >
-          <span v-if="teamsInitialized === true"></span>
+
+
+   <span
+      v-if="teamsInitialized===true"
+      
+     
+     
+      ></span>
+      
+        
+
+
+
+          <label  v-else for="paid-status" class="mr-2"><h6>{{$t('PublishPanel.video_access')}}</h6></label>
+                      <span
+      v-if="teamsInitialized===true"
+      
+     
+     
+      ></span>
 
           <vs-switch v-else v-model="isPaid" id="paid-status">
-            <span slot="on">{{ $t('PublishPanel.paid') }}</span>
-            <span slot="off">{{ $t('PublishPanel.free') }}</span>
+            <span slot="on">{{$t('PublishPanel.paid')}}</span>
+            <span slot="off">{{$t('PublishPanel.free')}}</span>
           </vs-switch>
+          
         </div>
         <div class="mt-4 text-left mb-4 flex items-center">
-          <h6 class="mr-2">{{ $t('PublishPanel.tags') }}</h6>
+          <h6 class="mr-2">{{$t('PublishPanel.tags')}}</h6>
           <vx-tooltip text="Delete all">
             <vs-icon icon="delete" size="20px" @click="deleteAll" />
           </vx-tooltip>
@@ -105,7 +114,7 @@
 </template>
 
 <script>
-import * as microsoftTeams from '@microsoft/teams-js';
+import * as microsoftTeams from "@microsoft/teams-js";
 export default {
   name: 'PublishPanel',
   components: {
@@ -114,10 +123,11 @@ export default {
   data() {
     return {};
   },
-  data() {
-    return {
-      teamsInitialized: false,
-    };
+   data(){
+return {
+ 
+  teamsInitialized:false,
+}
   },
   created() {
     if (!this.$route.params.videoId) {
@@ -125,18 +135,29 @@ export default {
       this.$store.dispatch('studio/generateTags');
     }
   },
-  created() {
-    var teamsInitialized = false;
-    microsoftTeams.initialize(() => {
-      teamsInitialized = true;
-    });
+   created() {
+       
+  
+var teamsInitialized = false;
+microsoftTeams.initialize(() => {
+  teamsInitialized = true;
+});
 
-    setTimeout(() => {
-      if (teamsInitialized) {
-        this.teamsInitialized = true;
-      } else {
-      }
-    }, 0);
+setTimeout(() => {
+  
+   if(teamsInitialized) {
+     this.teamsInitialized = true;
+    
+   
+   
+   } else {
+     
+     
+     
+    
+   
+   }
+}, 0);
   },
   computed: {
     insideIframe() {
@@ -150,13 +171,13 @@ export default {
         Script: true,
         Scenes: true,
         Subtitles: false,
-        Sound: false,
+        Sound: false
       };
-      if (this.$store.state.studio.preparedScenesVideos.some((el) => el)) {
+      if (this.$store.state.studio.preparedScenesVideos.some(el => el)) {
         steps.Subtitles = true;
       }
       if (
-        this.$store.state.studio.addedAudioVideos.some((el) => el) ||
+        this.$store.state.studio.addedAudioVideos.some(el => el) ||
         this.$store.state.studio.video.bg_music.url
       ) {
         steps.Sound = true;
@@ -170,9 +191,9 @@ export default {
       set(value) {
         this.$store.commit('studio/SET_VIDEO_ATTR', {
           key: 'title',
-          value: value,
+          value: value
         });
-      },
+      }
     },
     description: {
       get() {
@@ -181,9 +202,9 @@ export default {
       set(value) {
         this.$store.commit('studio/SET_VIDEO_ATTR', {
           key: 'description',
-          value: value,
+          value: value
         });
-      },
+      }
     },
     isPaid: {
       get() {
@@ -192,10 +213,10 @@ export default {
       set(value) {
         this.$store.commit('studio/SET_VIDEO_ATTR', {
           key: 'is_paid',
-          value: value,
+          value: value
         });
-      },
-    },
+      }
+    }
   },
   methods: {
     addTag(e) {
@@ -204,8 +225,8 @@ export default {
     },
     deleteAll() {
       this.$store.commit('studio/setTags', []);
-    },
-  },
+    }
+  }
 };
 </script>
 

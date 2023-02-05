@@ -33,7 +33,7 @@
           <vs-button
             @click="sendResetEmail"
             type="filled"
-            class="font-semibold mt-3 mx-1"
+            class="font-semibold mt-3"
             >Send Email</vs-button
           >
         </div>

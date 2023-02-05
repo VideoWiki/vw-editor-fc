@@ -20,6 +20,7 @@
             >
               <video
                 v-if="selectedFromLibraryMedia[parseInt(indexs)].animationUrl"
+                crossorigin="anonymous"
                 width="100%"
                 height="auto"
                 controls
@@ -43,6 +44,7 @@
             </div>
             <template v-else>
               <video
+                crossorigin="anonymous"
                 width="100%"
                 height="auto"
                 controls
@@ -62,7 +64,6 @@
               <div
                 :id="`trim_btn_${indexs}`"
                 class="trim-btn bg-primary"
-                title=""
                 @click="[showTrimBar(indexs), closeFastBar(indexs)]"
               >
                 <vs-tooltip text="Trim Video">
@@ -80,7 +81,6 @@
               <div
                 :id="`fast_btn_${indexs}`"
                 class="fast-btn bg-primary"
-                title=""
                 @click="[showFastBar(indexs), closeTrimBar(indexs)]"
               >
                 <vs-tooltip text="SpeedUp Video">

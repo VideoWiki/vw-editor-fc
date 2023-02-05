@@ -144,6 +144,30 @@ const router = new Router({
             rule: 'isPublic',
           },
         },
+        /* {
+          path: '/register',
+          name: 'Register',
+          component: () => import('./views/register/Register.vue'),
+          meta: {
+            rule: 'isGuest'
+          }
+        },
+        {
+          path: '/login',
+          name: 'Login',
+          component: () => import('./views/login/Login.vue'),
+          meta: {
+            rule: 'isGuest'
+          }
+        }, */
+        /* {
+          path: '/dashboard',
+          name: 'Dashboard',
+          component: () => import('./views/Dashboard.vue'),
+          meta: {
+            rule: 'isLogged'
+          }
+        }, */
         {
           path: '/creators',
           name: 'Creators',
@@ -186,17 +210,7 @@ const router = new Router({
       },
       children: [
         {
-          path: '/login',
-          name: 'Login',
-          component: () => import('@/views/login/components/Restricted.vue'),
-          meta: {
-            rule: 'isPublic',
-            // layout: 'full',
-            pageType: 'auth',
-          },
-        },
-        {
-          path: '/login',
+          path: '/login/public',
           name: 'Google Login',
           component: () => import('@/views/login/components/Public.vue'),
           meta: {
@@ -206,7 +220,17 @@ const router = new Router({
           },
         },
         {
-          path: '/login',
+          path: '/login/restricted',
+          name: 'Login',
+          component: () => import('@/views/login/components/Restricted.vue'),
+          meta: {
+            rule: 'isPublic',
+            // layout: 'full',
+            pageType: 'auth',
+          },
+        },
+        {
+          path: '/login/private',
           name: 'Wallet Login',
           component: () => import('@/views/login/components/Private.vue'),
           meta: {
@@ -216,6 +240,22 @@ const router = new Router({
           },
         },
       ],
+    },
+    {
+      path: '/password/reset/:token/:origin',
+      name: 'Reset Password',
+      component: () => import('@/views/passwordReset/Reset.vue'),
+      meta: {
+        rule: 'isPublic',
+      },
+    },
+    {
+      path: '/password/email',
+      name: 'Reset Email',
+      component: () => import('@/views/passwordReset/Reset.vue'),
+      meta: {
+        rule: 'isPublic',
+      },
     },
     {
       path: '/dashboard',
@@ -231,62 +271,6 @@ const router = new Router({
       component: () => import('./views/MyVideos.vue'),
       meta: {
         rule: 'isLogged',
-      },
-    },
-    {
-      path: '/callback',
-      name: 'Callback',
-      component: () => import('./views/login/components/Callback.vue'),
-      meta: {
-        rule: 'isPublic',
-      },
-    },
-    {
-      path: '/saveInfo',
-      name: 'Callback',
-      component: () => import('./views/login/components/SaveInfo.vue'),
-      meta: {
-        rule: 'isPublic',
-      },
-    },
-    {
-      path: '/consent',
-      name: 'Consent',
-      component: () => import('./views/login/components/Consent.vue'),
-      meta: {
-        rule: 'isPublic',
-      },
-    },
-    {
-      path: '/goLogin',
-      name: 'login',
-      component: () => import('./views/login/LoginLink.vue'),
-      meta: {
-        rule: 'isPublic',
-      },
-    },
-    {
-      path: '/password/reset/:token',
-      name: 'Reset Password',
-      component: () => import('@/views/passwordReset/Reset.vue'),
-      meta: {
-        rule: 'isPublic',
-      },
-    },
-    {
-      path: '/playground',
-      name: 'Playground',
-      component: () => import('@/views/Playground.vue'),
-      meta: {
-        rule: 'isPublic',
-      },
-    },
-    {
-      path: '/password/email',
-      name: 'Reset Email',
-      component: () => import('@/views/passwordReset/Reset.vue'),
-      meta: {
-        rule: 'isPublic',
       },
     },
     {
@@ -367,10 +351,9 @@ const router = new Router({
   ],
 });
 
-router.afterEach((to, from) => {
+router.afterEach(() => {
   // Remove initial loading
   const appLoading = document.getElementById('loading-bg');
-  console.log(appLoading);
   if (appLoading) {
     appLoading.style.display = 'none';
   }

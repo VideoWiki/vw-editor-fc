@@ -1,7 +1,6 @@
 import axios from '../../../axios/index.js';
 import store from '../../../../store/store.js';
 import Constant from '../../../../../constant';
-import Axios from 'axios';
 
 // Token Refresh
 let isAlreadyFetchingAccessToken = false;
@@ -48,49 +47,21 @@ export default {
       }
     );
   },
-  getUserInfo(payload) {
-    console.log(payload);
-    var config = {
-      method: 'get',
-      // url: `https://cors-anywhere.herokuapp.com/${Constant.hydra_lg}/userinfo`, //uncomment when use in local
-      url: `${Constant.hydra_lg}/userinfo`, // comment when use in local
-      headers: {
-        Authorization: 'Bearer ' + payload,
-        'Access-Control-Allow-Origin': '*',
-      },
-    };
-
-    return axios(config);
-  },
-  login(password, email, challenge) {
-    var data = JSON.stringify({
+  login(email, pwd) {
+    return axios.post(Constant.apiUrl + '/api/signin/', {
       email: email,
-      password: password,
+      password: pwd,
     });
-
-    var config = {
-      method: 'post',
-      // url: `https://cors-anywhere.herokuapp.com/https://openid.vwtv.pt/api/login/?login_type=web1&login_challenge=${challenge}`, //uncomment when use in local
-      url: `${Constant.hydra_ep}/api/login/?login_type=web1&login_challenge=${challenge}`, // comment when use in local
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      data: data,
-    };
-    return axios(config);
   },
   registerUser(firstName, lastName, email, pwd) {
-    // const url='https://cors-anywhere.herokuapp.com/' + Constant.hydra_ep + '/api/user/register/'
-    const url = Constant.hydra_ep + '/api/user/register/';
-    return axios.post(url, {
+    return axios.post(Constant.apiUrl + '/api/signup/', {
       first_name: firstName,
       last_name: lastName,
       username: email,
       email,
       password: pwd,
       profile: {
-        zip: 'your_zip_code',
-        city: 'your_city_name',
+        display_name: firstName + ' ' + lastName,
         active: true,
       },
     });
@@ -100,76 +71,32 @@ export default {
     for (const [key, value] of Object.entries(payload)) {
       form.append(key, value);
     }
-    return axios.patch(Constant.hydra_ep + `/api/profile/update/`, form);
+    return axios.post(Constant.apiUrl + `/api/user/update/`, form);
   },
   changePassword(payload) {
-    return axios.post(Constant.hydra_ep + `/api/change_password/`, payload);
+    return axios.post(Constant.apiUrl + `/api/change_password/`, payload);
   },
   refreshToken() {
-    return axios.post(Constant.apiUrl + '/aLpi/auth/refresh-token/', {
+    return axios.post(Constant.apiUrl + '/api/auth/refresh-token/', {
       accessToken: localStorage.getItem('accessToken'),
     });
   },
   generateNonce(payload) {
-    var FormData = require('form-data');
-    var data = new FormData();
-    data.append('public_add', payload.public_add);
-
-    var config = {
-      method: 'post',
-      // url: `https://cors-anywhere.herokuapp.com/${Constant.hydra_ep}/api/user/metamask/register/`, //uncomment when use in local
-      url: `${Constant.hydra_ep}/api/user/metamask/register/`, // comment when use in local
-      data: data,
-    };
-
-    return axios(config);
+    return axios.post(Constant.apiUrl + `/api/add/public/address/`, payload);
   },
   verifySignature(payload) {
-    console.log(payload);
-    var config = {
-      method: 'post',
-      // url: `https://cors-anywhere.herokuapp.com/${Constant.hydra_ep}/api/login/?login_challenge=${payload.login_challenge}&login_type=web3`, //uncomment when use in local
-      url: `${Constant.hydra_ep}/api/login/?login_challenge=${payload.login_challenge}&login_type=web3`, // comment when use in local
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      data: payload,
-    };
-
-    return axios(config);
-  },
-
-  generateAccessToken(payload) {
-    console.log('payload', payload);
-    var data = JSON.stringify({
-      access_token: payload.access_token,
-    });
-    return axios({
-      method: 'POST',
-      // url: `https://cors-anywhere.herokuapp.com/${Constant.hydra_ep}/api/login/?login_type=web2&login_challenge=${payload.login_challenge}`, //uncomment when use in local
-      url: `${Constant.hydra_ep}/api/login/?login_type=web2&login_challenge=${payload.login_challenge}`, // comment when use in local
-      data,
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    });
+    return axios.post(Constant.apiUrl + `/api/verify/signature/`, payload);
   },
   sendResetEmail(payload) {
     return axios.get(
-      Constant.hydra_ep +
-        `/api/password/reset/mail/?email=${payload}&origin=cast`
+      Constant.apiUrl +
+        `/api/password/reset/mail/?email=${payload}&origin=editor`
     );
   },
   resetPassword(payload) {
-    return axios.post(Constant.hydra_ep + '/api/password/reset/', payload);
+    return axios.post(Constant.apiUrl + '/api/user/password/reset/', payload);
   },
-  autoLogin({ username, lc, token }) {
-    return axios.get(
-      Constant.hydra_ep +
-        `/api/auto/login/?username=${username}&login_challenge=${lc}`,
-      {
-        headers: { Authorization: `Bearer ${token}` },
-      }
-    );
+  generateAccessToken(payload) {
+    return axios.post(Constant.apiUrl + `/api/google/`, payload);
   },
 };

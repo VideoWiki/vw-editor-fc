@@ -1,11 +1,9 @@
 <template>
   <div>
     <div class="text-center mb-20">
-      <h1 class="font-extrabold text-4xl mb-4">
-        {{ $t('NewsLetter.title1') }}
-      </h1>
+      <h1 class="font-extrabold text-4xl mb-4">{{$t('NewsLetter.title1')}}</h1>
       <p class="font-medium">
-        {{ $t('NewsLetter.title2') }}
+        {{$t('NewsLetter.title2')}}
       </p>
     </div>
     <div class="flex lg:w-2/4 justify-center">
@@ -34,7 +32,7 @@
               :size="$store.state.windowWidth < 500 ? 'default' : 'large'"
               @click="startSubscription"
               :disabled="subscribeInProgress"
-              >{{ $t('NewsLetter.button') }}</vs-button
+              >{{$t('NewsLetter.button')}}</vs-button
             >
           </div>
         </template>
@@ -50,12 +48,12 @@ export default {
   data() {
     return {
       userEmail: '',
-      subscribeInProgress: false,
+      subscribeInProgress: false
     };
   },
   methods: {
     startSubscription() {
-      this.$validator.validateAll().then((result) => {
+      this.$validator.validateAll().then(result => {
         if (result) {
           const url = '/community/subscribe/';
           const data = {};
@@ -66,7 +64,7 @@ export default {
           this.$vs.notify({
             title: this.$t('NewsLetter.Valid.title'),
             text: this.$t('NewsLetter.Valid.text'),
-            color: 'danger',
+            color: 'danger'
           });
         }
       });
@@ -76,19 +74,19 @@ export default {
         this.$vs.notify({
           title: this.$t('NewsLetter.Response.409.title'),
           text: this.$t('NewsLetter.Response.409.text'),
-          color: 'warning',
+          color: "warning"
         });
       } else if (apiResponse.status === 200) {
         this.$vs.notify({
           title: this.$t('NewsLetter.Response.200.title'),
           text: this.$t('NewsLetter.Response.200.text'),
-          color: 'success',
+          color: "success"
         });
         this.userEmail = '';
         this.$validator.reset();
       }
       this.subscribeInProgress = false;
-    },
-  },
+    }
+  }
 };
 </script>

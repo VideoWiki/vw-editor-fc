@@ -1,6 +1,6 @@
 <template>
   <div>
-    <form class="mt-6" @submit="login">
+    <form class="mt-6" @submit.prevent="login">
       <div class="vx-row mb-6">
         <div class="vx-col w-full">
           <div class="mb-4">
@@ -13,6 +13,7 @@
           </div>
           <input
             v-validate="'required|email'"
+            type="email"
             name="email"
             :placeholder="$t('Login.email_p')"
             class="modified-input"
@@ -46,13 +47,13 @@
           </div>
         </div>
       </div>
+
       <div class="flex flex-wrap justify-between my-5" v-if="!popup">
         <vs-checkbox v-model="checkbox_remember_me" class="mb-3">{{
           $t('Login.remember')
         }}</vs-checkbox>
         <router-link to="/password/email">{{ $t('Login.forgot') }}</router-link>
       </div>
-      <button style="display: none">submit</button>
       <div class="flex flex-wrap mb-3">
         <vs-button
           :disabled="!validateForm"
@@ -61,6 +62,7 @@
           >{{ $t('Login.login') }}</vs-button
         >
       </div>
+      <input type="submit" value="" style="display: none" />
     </form>
     <div class="flex flex-wrap mb-3 justify-center">
       {{ $t('Login.account') }}
@@ -75,11 +77,8 @@
 
 <script>
 import constants from '../../../../constant';
-import { utils } from '@/mixins/index';
-// import axios from '../../../axios';
 
 export default {
-  mixins: [utils],
   data() {
     return {
       constants,
@@ -105,75 +104,130 @@ export default {
       return this.$store.state.AppActiveUser;
     },
   },
-
+  mounted() {},
   methods: {
-    login(e) {
-      e.preventDefault();
+    login() {
       if (this.validateForm) {
         this.loginJWT();
-      } else {
+      }
+    },
+    checkLogin() {
+      // If user is already logged in notify
+      if (this.$store.state.auth.isUserLoggedIn()) {
         this.$vs.notify({
-          title: 'Fill all the details',
+          title: this.$t('Login.notify.title'),
+          text: this.$t('Login.notify.text'),
           iconPack: 'feather',
           icon: 'icon-alert-circle',
           color: 'warning',
         });
+
+        return false;
       }
+      return true;
     },
     loginJWT() {
+      if (!this.checkLogin()) return;
+
       // Loading
       this.$vs.loading();
+
       const payload = {
         checkbox_remember_me: this.checkbox_remember_me,
         userDetails: {
           email: this.email,
           password: this.password,
         },
-        params: {
-          login_type: 'web1',
-          login_challenge: this.$route.query.login_challenge,
-        },
       };
+
       this.$store
         .dispatch('auth/login', payload)
         .then((response) => {
-          this.$vs.loading();
-          window.location.replace(response.data.redirect_to);
-          this.$vs.loading.close();
+          this.$cookies.set(
+            'Token',
+            response.data.accessToken,
+            null,
+            null,
+            'https://cast.video.wiki'
+          );
+          this.$cookies.set(
+            'userId',
+            response.data.usersData.id,
+            null,
+            null,
+            'https://cast.video.wiki'
+          );
+          this.$cookies.set(
+            'Token',
+            response.data.accessToken,
+            null,
+            null,
+            'https://room.video.wiki'
+          );
+          this.$cookies.set(
+            'userId',
+            response.data.usersData.id,
+            null,
+            null,
+            'https://room.video.wiki'
+          );
+
+          window.dataLayer = window.dataLayer || [];
+          window.dataLayer.push({
+            event: 'login',
+            authenticationMethod: 'Email',
+            userId: response.data.usersData.id, //this should be replaced with an actual ID
+          });
           this.$vs.notify({
             title: 'Success',
-            text: 'Login Successfull',
+            text: 'Login Successful',
             iconPack: 'feather',
             color: 'success',
           });
+
+          this.$vs.loading.close();
+          // window.location.href = '/';
+          this.$acl.change(this.activeUserInfo.userRole);
+          if (this.popup) this.$emit('loggedIn');
+          else this.$router.push('/');
         })
         .catch((error) => {
-          console.log(error);
-          window.location.href = constants.challengeUri;
-          this.$vs.loading.close();
           if (
             error.response.data.message ===
               "user doesn't exist , register yourself" ||
             error.response.data.message === 'invalid Password!'
-          )
+          ) {
+            if (
+              error.response.data.message ===
+              "user doesn't exist , register yourself"
+            )
+              this.$vs.notify({
+                time: 6000,
+                title: 'Error',
+                text: 'User does not exist. Register yourself.',
+                iconPack: 'feather',
+                icon: 'icon-alert-circle',
+                color: 'danger',
+              });
+            else
+              this.$vs.notify({
+                time: 6000,
+                title: 'Error',
+                text: 'Password entered is incorrect.',
+                iconPack: 'feather',
+                icon: 'icon-alert-circle',
+                color: 'danger',
+              });
+          } else {
             this.$vs.notify({
-              time: 6000,
               title: 'Error',
-              text: "User dosen't exist",
-              iconPack: 'feather',
-              icon: 'icon-alert-circle',
-              color: 'danger',
-            });
-          else {
-            this.$vs.notify({
-              time: 6000,
-              title: 'Error',
-              text: 'Something Went Wrong Try Again',
+              text: error.response.data.message[0],
               iconPack: 'feather',
               icon: 'icon-alert-circle',
               color: 'danger',
             });
           }
+          this.$vs.loading.close();
         });
     },
     registerUser() {
@@ -191,17 +245,13 @@ export default {
 .modified-input {
   height: 60px;
   border: none;
+  /* border-radius: 16px; */
   background: #f3f3f3;
   font-family: Montserrat;
   border-radius: 4px;
   padding: 2rem;
   width: 100%;
 }
-
-.lHeight {
-  margin: 8px 0 0 0;
-}
-
 .input-icon {
   position: absolute;
   right: 5%;

@@ -19,7 +19,8 @@
           class="vx-row w-full md:w-2/3 sm:w-1/1 p-2 items-center justify-center"
         >
           <div class="w-full lg:w-1/2 relative hidden lg:block">
-            <input @keyup.enter="searchMedia()"
+            <input
+              @keyup.enter="searchMedia()"
               :placeholder="$t('NavbarDashboard.search')"
               v-model="videoSearchQuery"
               class="w-full border-0 search-bar"
@@ -45,12 +46,13 @@
           <wallet class="mr-3 hidden md:block lg:block" />
           <div>
             <profile-drop-down v-if="accessToken" />
-
-            <a v-else style="color: white" :href="challengeUrl">
-              <vs-button class="font-bold text-base lg:text-lg" type="filled">{{
-                $t('Navbar.login')
-              }}</vs-button>
-            </a>
+            <vs-button
+              v-else
+              type="filled"
+              style="font-weight: bold; font-size: 14px"
+              @click="handleLogin"
+              >{{ $t('NavbarDashboard.login') }}</vs-button
+            >
           </div>
         </div>
       </vs-navbar>
@@ -62,7 +64,6 @@
 import ProfileDropDown from './components/ProfileDropDown.vue';
 import { mapState } from 'vuex';
 import Wallet from './components/Wallet.vue';
-import constants from '../../../../constant';
 export default {
   name: 'the-navbar-horizontal',
   components: {
@@ -72,7 +73,6 @@ export default {
   data() {
     return {
       videoSearchQuery: '',
-      challengeUrl: constants.challengeUri,
     };
   },
   computed: {
@@ -80,7 +80,7 @@ export default {
   },
   methods: {
     handleLogin() {
-      this.$router.push('/login');
+      this.$router.push('/login/restricted');
     },
     connect() {
       this.$store.dispatch('connectWallet');
@@ -100,6 +100,9 @@ export default {
   border-bottom: none !important;
   box-shadow: none !important;
   display: flex;
+  /*justify-content: space-between!important;
+  padding-left: 120px!important;
+  padding-right: 15px!important;*/
 }
 .search-bar {
   height: 40px;

@@ -14,15 +14,6 @@ module.exports = {
   publicPath: '/',
   transpileDependencies: ['vue-echarts', 'resize-detector'],
   configureWebpack: {
-    module: {
-      rules: [
-        {
-          test: /\.mjs$/,
-          include: /node_modules/,
-          type: 'javascript/auto',
-        },
-      ],
-    },
     plugins: [new CompressionPlugin()],
     optimization: {
       splitChunks: {

@@ -37,6 +37,21 @@ export default {
     },
   },
   methods: {
+    checkLogin() {
+      // If user is already logged in notify
+      if (this.$store.state.auth.isUserLoggedIn()) {
+        this.$vs.notify({
+          title: this.$t('Login.notify.title'),
+          text: this.$t('Login.notify.text'),
+          iconPack: 'feather',
+          icon: 'icon-alert-circle',
+          color: 'warning',
+        });
+
+        return false;
+      }
+      return true;
+    },
     //Metamsask Connection
     async handleSignMessage(publicAddress, nonce) {
       // Loading
@@ -55,12 +70,10 @@ export default {
           .dispatch('auth/sendSignature', {
             signature: this.signature,
             nonce: this.nonce,
-            login_type: 'web3',
-            login_challenge: this.$route.query.login_challenge,
           })
           .then((res) => {
             //uncomment the statment below before pushing wile
-            window.location.replace(res.data.redirect_to);
+            window.location.replace('/');
             //Remove the statment below before pushing wile
             this.$vs.notify({
               title: this.$t('Login.notify.title'),

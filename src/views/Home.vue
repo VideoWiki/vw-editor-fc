@@ -20,7 +20,6 @@ import EditScenes from './pages/EditScenes';
 import AddMusic from './pages/AddMusic';
 // import FormatVideo from './pages/FormatVideo';
 import MsTeams from './Integrations/MsTeams/Main';
-import constants from '../../constant';
 export default {
   data() {
     return {};
@@ -45,6 +44,15 @@ export default {
     }
   },
   mounted() {
+    if (!this.$store.state.auth.isUserLoggedIn()) {
+      this.$vs.notify({
+        title: 'You are not Logged in',
+        text: 'To continue you must login',
+        color: 'danger',
+        time: 5000,
+      });
+      this.$router.push('login/restricted');
+    }
     if (this.$route.query.meetingId) {
       this.$Progress.start();
       this.$vs.loading({ color: 'transparent' });

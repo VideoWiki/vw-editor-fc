@@ -1,6 +1,6 @@
 <template>
   <div class="relative">
-    <div class="vx-navbar-wrapper nav navbar-full p-0">
+    <div class="vx-navbar-wrapper navbar-full p-0">
       <vs-navbar class="navbar-custom navbar-skelton custom-header responsive">
         <div class="flex justify-between lg:w-11/12 w-full">
           <router-link
@@ -36,11 +36,22 @@
                   >{{ $t('Navbar.content') }}
                   <vs-chip class="absolute create-chip">
                     <span class="text-primary font-bold">{{
-                      $t('Navbar.chip')
+                      $t('Navbar.create')
                     }}</span>
                   </vs-chip>
                 </router-link>
               </div>
+              <!--div class="navItem px-base">
+                <router-link
+                  to="/dashboard"
+                  class="text-dark text-2xl hover-link relative"
+                  exact-active-class="link-active"
+                  >Course
+                  <vs-chip class="absolute create-chip">
+                    <span class="text-primary font-bold">CREATE</span>
+                  </vs-chip></router-link
+                >
+              </div-->
               <div class="navItem px-base">
                 <router-link
                   to="/classroom"
@@ -55,29 +66,18 @@
                 >
               </div>
               <div class="navItem px-base">
-                <a
-                  href="https://dev.cast.video.wiki/createEvent"
-                  class="text-dark text-2xl hover-link relative"
-                  exact-active-class="link-active"
-                  >Cast
-                  <vs-chip class="absolute create-chip">
-                    <span class="text-primary font-bold">CREATE</span>
-                  </vs-chip></a
-                >
-              </div>
-              <div class="navItem px-base">
                 <community-drop-down />
               </div>
             </div>
             <div class="px-3">
               <profile-drop-down v-if="accessToken" />
-              <a v-else style="color: white" :href="challengeUrl">
-                <vs-button
-                  class="font-bold text-base lg:text-lg"
-                  type="filled"
-                  >{{ $t('Navbar.login') }}</vs-button
-                >
-              </a>
+              <vs-button
+                v-else
+                class="font-bold text-base lg:text-lg"
+                type="filled"
+                to="/login/restricted"
+                >{{ $t('Navbar.login') }}</vs-button
+              >
             </div>
             <VideoWikiChat />
           </div>
@@ -93,15 +93,9 @@ import CommunityDropDown from './components/CommunityDropDown.vue';
 import VideoWikiChat from '../../../views/VideoWikiChat';
 
 import { mapState } from 'vuex';
-import constants from '../../../../constant';
 
 export default {
   name: 'the-navbar-horizontal',
-  data() {
-    return {
-      challengeUrl: constants.challengeUri,
-    };
-  },
   components: {
     ProfileDropDown,
     CommunityDropDown,
@@ -127,6 +121,9 @@ export default {
   border-bottom: none !important;
   box-shadow: none !important;
   display: flex;
+  /*justify-content: space-between!important;
+  padding-left: 120px!important;
+  padding-right: 15px!important;*/
 }
 .create-chip {
   top: -13px;
@@ -156,9 +153,5 @@ export default {
 }
 .navItem a:hover .create-chip {
   visibility: visible;
-}
-
-.nav {
-  font-family: Arial, Helvetica, sans-serif !important;
 }
 </style>

@@ -13,6 +13,7 @@ import {
 } from '@oceanprotocol/lib';
 import { createClient, gql, dedupExchange, fetchExchange } from 'urql';
 import { refocusExchange } from '@urql/exchange-refocus';
+import constants from '../../constant';
 
 const tokenPriceQuery = gql`
   query TokenPriceQuery($datatokenId: ID!, $account: String) {
@@ -136,7 +137,7 @@ function getOceanConfig(network) {
       network === 'gaiaxtestnet' ||
       network === 2021000
       ? undefined
-      : '418d1d91f132479ebcc600dab6dbbd3f'
+      : constants.infuraId
   );
   return config;
 }

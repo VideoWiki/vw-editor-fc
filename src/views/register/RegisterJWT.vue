@@ -105,7 +105,6 @@
 </template>
 
 <script>
-import constants from '../../../constant';
 export default {
   props: {
     popup: {
@@ -143,12 +142,30 @@ export default {
     },
   },
   methods: {
+    checkLogin() {
+      // If user is already logged in notify
+      if (this.$store.state.auth.isUserLoggedIn()) {
+        // Close animation if passed as payload
+        // this.$vs.loading.close()
+
+        this.$vs.notify({
+          title: 'Login Attempt',
+          text: 'You are already logged in!',
+          iconPack: 'feather',
+          icon: 'icon-alert-circle',
+          color: 'warning',
+        });
+
+        return false;
+      }
+      return true;
+    },
     registerUserJWt() {
       // If form is not validated or user is already login return
-      console.log(1);
-      if (!this.validateForm) return;
+      if (!this.validateForm || !this.checkLogin()) return;
 
       this.$vs.loading();
+
       const payload = {
         userDetails: {
           firstName: this.firstName,
@@ -159,17 +176,42 @@ export default {
         },
         notify: this.$vs.notify,
       };
-      console.log(2);
       this.$store
         .dispatch('auth/registerUser', payload)
         .then((response) => {
-          this.$vs.notify({
-            time: 3000,
-            title: 'Success',
-            text: 'Registered Successfully',
-            color: 'success',
+          window.dataLayer = window.dataLayer || [];
+          window.dataLayer.push({
+            event: 'register',
+            authenticationMethod: 'Email',
+            userId: response.data.usersData.id, //this should be replaced with an actual ID
           });
-          location.href = constants.challengeUri;
+          const payload = {
+            checkbox_remember_me: true,
+            userDetails: {
+              email: this.email,
+              password: this.password,
+            },
+          };
+
+          this.$store
+            .dispatch('auth/login', payload)
+            .then(() => {
+              this.$vs.loading.close();
+              // window.location.href = '/';
+              this.$acl.change(this.activeUserInfo.userRole);
+              if (this.popup) this.$emit('registered');
+              else this.$router.push('/');
+            })
+            .catch((error) => {
+              this.$vs.loading.close();
+              this.$vs.notify({
+                title: 'Login Error',
+                text: error.response.data.message[0],
+                iconPack: 'feather',
+                icon: 'icon-alert-circle',
+                color: 'danger',
+              });
+            });
         })
         .catch((error) => {
           this.$vs.loading.close();
@@ -184,7 +226,7 @@ export default {
     },
     navigateToLogin() {
       if (this.popup) this.$emit('toLogin');
-      else location.href = constants.challengeUri;
+      else this.$router.push('/login/restricted');
     },
   },
 };
@@ -193,6 +235,7 @@ export default {
 .modified-input {
   height: 60px;
   border: none;
+  /* border-radius: 16px; */
   background: #f3f3f3;
   font-family: Montserrat;
   border-radius: 4px;
@@ -206,3 +249,189 @@ export default {
   cursor: pointer;
 }
 </style>
+<!-- =========================================================================================
+File Name: RegisterJWT.vue
+Description: Register Page for JWT
+----------------------------------------------------------------------------------------
+Item Name: Vuexy - Vuejs, HTML & Laravel Admin Dashboard Template
+  Author: Pixinvent
+Author URL: http://www.themeforest.net/user/pixinvent
+========================================================================================== -->
+
+<!--template>
+  <div class="clearfix">
+    <vs-input
+      v-validate="'required|alpha_dash|min:3'"
+      data-vv-validate-on="blur"
+      label-placeholder="First Name"
+      name="firstName"
+      placeholder="First Name"
+      v-model="firstName"
+      class="w-full"
+    />
+    <span class="text-danger text-sm">{{ errors.first('firstName') }}</span>
+
+    <vs-input
+      v-validate="'required|alpha_dash|min:3'"
+      data-vv-validate-on="blur"
+      label-placeholder="Last Name"
+      name="lastName"
+      placeholder="Last Name"
+      v-model="lastName"
+      class="w-full"
+    />
+    <span class="text-danger text-sm">{{ errors.first('lastName') }}</span>
+
+    <vs-input
+      v-validate="'required|email'"
+      data-vv-validate-on="blur"
+      name="email"
+      type="email"
+      label-placeholder="Email"
+      placeholder="Email"
+      v-model="email"
+      class="w-full mt-6"
+    />
+    <span class="text-danger text-sm">{{ errors.first('email') }}</span>
+
+    <vs-input
+      ref="password"
+      type="password"
+      data-vv-validate-on="blur"
+      v-validate="'required|min:6|max:10'"
+      name="password"
+      label-placeholder="Password"
+      placeholder="Password"
+      v-model="password"
+      class="w-full mt-6"
+    />
+    <span class="text-danger text-sm">{{ errors.first('password') }}</span>
+
+    <vs-input
+      type="password"
+      v-validate="'min:6|max:10|confirmed:password'"
+      data-vv-validate-on="blur"
+      data-vv-as="password"
+      name="confirm_password"
+      label-placeholder="Confirm Password"
+      placeholder="Confirm Password"
+      v-model="confirm_password"
+      class="w-full mt-6"
+    />
+    <span class="text-danger text-sm">{{
+      errors.first('confirm_password')
+    }}</span>
+
+    <vs-checkbox v-model="isTermsConditionAccepted" class="mt-6"
+      >I accept the terms & conditions.</vs-checkbox
+    >
+    <vs-button class="mt-6" @click="registerUserJWt" :disabled="!validateForm"
+      >Register</vs-button
+    >
+    <vs-button type="border" to="/login" class="float-right mt-6"
+      >Login</vs-button
+    >
+  </div>
+</template>
+
+<script>
+export default {
+  data() {
+    return {
+      firstName: '',
+      lastName: '',
+      email: '',
+      password: '',
+      confirm_password: '',
+      isTermsConditionAccepted: true
+    };
+  },
+  computed: {
+    validateForm() {
+      return (
+        !this.errors.any() &&
+        this.displayName !== '' &&
+        this.email !== '' &&
+        this.password !== '' &&
+        this.confirm_password !== '' &&
+        this.isTermsConditionAccepted === true
+      );
+    }
+  },
+  methods: {
+    checkLogin() {
+      // If user is already logged in notify
+      if (this.$store.state.auth.isUserLoggedIn()) {
+        // Close animation if passed as payload
+        // this.$vs.loading.close()
+
+        this.$vs.notify({
+          title: 'Login Attempt',
+          text: 'You are already logged in!',
+          iconPack: 'feather',
+          icon: 'icon-alert-circle',
+          color: 'warning'
+        });
+
+        return false;
+      }
+      return true;
+    },
+    registerUserJWt() {
+      // If form is not validated or user is already login return
+      if (!this.validateForm || !this.checkLogin()) return;
+
+      this.$vs.loading();
+
+      const payload = {
+        userDetails: {
+          firstName: this.firstName,
+          lastName: this.lastName,
+          email: this.email,
+          password: this.password,
+          confirmPassword: this.confirm_password
+        },
+        notify: this.$vs.notify
+      };
+      this.$store
+        .dispatch('auth/registerUser', payload)
+        .then(response => {
+          const payload = {
+            checkbox_remember_me: true,
+            userDetails: {
+              email: this.email,
+              password: this.password
+            }
+          };
+
+          this.$store
+            .dispatch('auth/login', payload)
+            .then(() => {
+              this.$vs.loading.close();
+              window.location.href = '/dashboard';
+            })
+            .catch(error => {
+              this.$vs.loading.close();
+              this.$vs.notify({
+                title: 'Login Error',
+                text: error.message,
+                iconPack: 'feather',
+                icon: 'icon-alert-circle',
+                color: 'danger'
+              });
+            });
+        })
+        .catch(error => {
+          this.$vs.loading.close();
+          this.$vs.notify({
+            title: 'Register Error',
+            text: error.message,
+            iconPack: 'feather',
+            icon: 'icon-alert-circle',
+            color: 'danger'
+          });
+        });
+    }
+  }
+};
+</script-->

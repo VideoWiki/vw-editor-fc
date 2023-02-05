@@ -29,6 +29,7 @@
       <template v-if="selectedFromLibraryMedia[parseInt(indexs)]">
         <div class="scene-video mb-4" :id="`scene_video_${indexs}`">
           <video
+          crossorigin="anonymous"
             width="100%"
             height="auto"
             controls
@@ -43,6 +44,7 @@
             >
               <video
                 v-if="selectedFromLibraryMedia[parseInt(indexs)].animationUrl"
+                crossorigin="anonymous"
                 width="100%"
                 height="auto"
                 controls
@@ -60,6 +62,7 @@
               v-else
               width="100%"
               height="auto"
+              crossorigin="anonymous"
               controls
               :id="`library_video_${indexs}`"
               :src="selectedFromLibraryMedia[parseInt(indexs)].url"
@@ -76,7 +79,6 @@
             <div
               :id="`trim_btn_${indexs}`"
               class="trim-btn bg-primary"
-              title=""
               @click="[showTrimBar(indexs), closeFastBar(indexs)]"
             >
               <vs-tooltip text="Trim Video">
@@ -94,7 +96,6 @@
             <div
               :id="`fast_btn_${indexs}`"
               class="fast-btn bg-primary"
-              title="Fast Video"
               @click="[showFastBar(indexs), closeTrimBar(indexs)]"
             >
               <vs-tooltip text="SpeedUp Video">
@@ -183,7 +184,6 @@
           </div>
           <div
             class="add-animation-btn bg-primary"
-            title="Add Animation"
             @click="OpenAnimationModal(indexs)"
             v-if="isImageUrl(selectedFromLibraryMedia[parseInt(indexs)].url)"
           >
@@ -357,6 +357,17 @@ export default {
       }
       return true;
     },
+    /* getStyle(prop, idx) {
+      idx = parseInt(idx);
+      if (!this.styles[idx] || !this.styles[idx][prop]) {
+        this.$store.commit('studio/setStyles', {
+          prop: prop,
+          sceneNum: idx,
+          value: this.defaultStyle[prop]
+        });
+      }
+      return this.styles[idx][prop];
+    }, */
     setStyle(prop, idx, value) {
       this.$store.commit('studio/setStyles', {
         prop,

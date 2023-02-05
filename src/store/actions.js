@@ -3,12 +3,9 @@ import axios from 'axios';
 import store from './store';
 import { downloadFile, getAccessDetails, order } from '../blockchain/Download';
 import { PUBLISHVIDEOS } from '../blockchain/OceanMarket';
-import fileReaderStream from 'filereader-stream';
 import { Web3Storage } from 'web3.storage/dist/bundle.esm.min.js';
 import constants from '../../constant';
-import { ethers, providers, utils } from 'ethers';
-import { WebBundlr } from '@bundlr-network/client';
-import BigNumber from 'bignumber.js';
+import { ethers } from 'ethers';
 
 const polyABI = [
   { inputs: [], stateMutability: 'nonpayable', type: 'constructor' },
@@ -888,7 +885,7 @@ const actions = {
     const contract = new ethers.Contract(contractAddress, abi, provider);
 
     const _tokenId = payload.tokenId;
-
+    console.log(payload.contractAddress);
     const tx = await contract.ownerOf(_tokenId);
     console.log(tx);
 
@@ -905,59 +902,59 @@ const actions = {
     const tx = await contract.tokenURI(_tokenId);
     return tx;
   },
-  async initialiseBundlr({ commit }, payload) {
-    await window.ethereum.enable();
+  // async initialiseBundlr({ commit }, payload) {
+  //   await window.ethereum.enable();
 
-    const provider = new providers.Web3Provider(window.ethereum);
-    await provider._ready();
+  //   const provider = new providers.Web3Provider(window.ethereum);
+  //   await provider._ready();
 
-    const bundlr = new WebBundlr(
-      'https://devnet.bundlr.network',
-      'matic',
-      provider,
-      {
-        providerUrl: 'https://rpc-mumbai.matic.today',
-      }
-    );
-    await bundlr.ready();
-    var bal = await bundlr.getLoadedBalance();
-    bal = utils.formatEther(bal.toString());
-    if (bal < 0.02) {
-      const amountParsed = actions.parseInput(0.1, bundlr);
-      let res = await bundlr.fund(amountParsed);
-    }
-    const response = await fetch(payload);
-    const contentType = response.headers.get('content-type');
-    const uploader = bundlr.uploader.chunkedUploader;
-    uploader.setBatchSize(10);
-    const chunkSize = 2000000;
-    uploader.setChunkSize(chunkSize);
-    const blob = await response.blob();
-    const file = new File([blob], 'PREVIEW.webm', { contentType });
-    const fileSize = file.size;
-    // if (fileSize < chunkSize) totalChunks.current = 1;
-    // else {
-    //   totalChunks.current = Math.floor(fileSize / chunkSize);
-    // }
-    const dataStream = fileReaderStream(file);
-    const tx = await uploader.uploadData(dataStream, [
-      { name: 'Content-Type', value: 'video/webm' },
-    ]);
-    // console.log(`http://arweave.net/${tx.data.id}`);
-    return `http://arweave.net/${tx.data.id}`;
-    // fetchBalance();
-  },
-  parseInput(input, bundlr) {
-    const conv = new BigNumber(input).multipliedBy(
-      bundlr.currencyConfig.base[1]
-    );
-    if (conv.isLessThan(1)) {
-      console.log('error: value too small');
-      return null;
-    } else {
-      return conv;
-    }
-  },
+  //   const bundlr = new WebBundlr(
+  //     'https://devnet.bundlr.network',
+  //     'matic',
+  //     provider,
+  //     {
+  //       providerUrl: 'https://rpc-mumbai.matic.today',
+  //     }
+  //   );
+  //   await bundlr.ready();
+  //   var bal = await bundlr.getLoadedBalance();
+  //   bal = utils.formatEther(bal.toString());
+  //   if (bal < 0.02) {
+  //     const amountParsed = actions.parseInput(0.1, bundlr);
+  //     let res = await bundlr.fund(amountParsed);
+  //   }
+  //   const response = await fetch(payload);
+  //   const contentType = response.headers.get('content-type');
+  //   const uploader = bundlr.uploader.chunkedUploader;
+  //   uploader.setBatchSize(10);
+  //   const chunkSize = 2000000;
+  //   uploader.setChunkSize(chunkSize);
+  //   const blob = await response.blob();
+  //   const file = new File([blob], 'PREVIEW.webm', { contentType });
+  //   const fileSize = file.size;
+  //   // if (fileSize < chunkSize) totalChunks.current = 1;
+  //   // else {
+  //   //   totalChunks.current = Math.floor(fileSize / chunkSize);
+  //   // }
+  //   const dataStream = fileReaderStream(file);
+  //   const tx = await uploader.uploadData(dataStream, [
+  //     { name: 'Content-Type', value: 'video/webm' },
+  //   ]);
+  //   // console.log(`http://arweave.net/${tx.data.id}`);
+  //   return `http://arweave.net/${tx.data.id}`;
+  //   // fetchBalance();
+  // },
+  // parseInput(input, bundlr) {
+  //   const conv = new BigNumber(input).multipliedBy(
+  //     bundlr.currencyConfig.base[1]
+  //   );
+  //   if (conv.isLessThan(1)) {
+  //     console.log('error: value too small');
+  //     return null;
+  //   } else {
+  //     return conv;
+  //   }
+  // },
 };
 
 export default actions;

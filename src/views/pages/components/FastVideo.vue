@@ -14,7 +14,7 @@
         </vs-button>
 
         <vs-dropdown-menu>
-          <template v-for="(speedOption,index) in speedOptions">
+          <template v-for="(speedOption, index) in speedOptions">
             <vs-dropdown-item
               :key="speedOption.value"
               class="font-bold"
@@ -49,8 +49,8 @@ export default {
   props: {
     sceneNum: {
       type: String,
-      required: true
-    }
+      required: true,
+    },
   },
   data() {
     return {
@@ -63,9 +63,9 @@ export default {
         { text: '1.75 X', value: 1.75 },
         { text: '2 X', value: 2 },
         { text: '3 X', value: 3 },
-        { text: '4 X', value: 4 }
+        { text: '4 X', value: 4 },
       ],
-      checkVideo: Function
+      checkVideo: Function,
     };
   },
   mounted() {
@@ -99,25 +99,24 @@ export default {
       this.$vs.loading({
         container: `#scene_card_${this.sceneNum}`,
         text: 'Fast Forwading video',
-        background: '#fff'
+        background: '#fff',
       });
-
       const payload = {
         video_url: document.getElementById(`library_video_${this.sceneNum}`)
           .src,
         speed_factor: this.speedOptions[this.selectedSpeed].value,
         start: `00:${this.prettyTime(this.videoRuntime[0])}`,
-        end: `00:${this.prettyTime(this.videoRuntime[1])}`
+        end: `00:${this.prettyTime(this.videoRuntime[1])}`,
       };
       this.$store
         .dispatch('studio/fastVideo', payload)
-        .then(res => {
+        .then((res) => {
           this.$store.commit('studio/selectMedia', {
             sceneNum: this.sceneNum,
             value: {
               id: null,
-              url: res.video_url
-            }
+              url: res.video_url,
+            },
           });
           this.$emit('hideFastbar');
         })
@@ -125,7 +124,7 @@ export default {
           this.$vs.notify({
             title: 'Error',
             text: 'Fast Forwading Failed',
-            color: 'danger'
+            color: 'danger',
           });
         })
         .finally(() => {
@@ -133,8 +132,8 @@ export default {
             `#scene_card_${this.sceneNum} > .con-vs-loading`
           );
         });
-    }
-  }
+    },
+  },
   /* beforeDestroy() {
     const video = document.getElementById(`library_video_${this.sceneNum}`);
     video.removeEventListener('durationchange', this.setDuration);

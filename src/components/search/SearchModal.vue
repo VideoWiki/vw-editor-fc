@@ -1,7 +1,11 @@
 <template>
   <vs-popup title="Search Media" :active.sync="modalVisibility">
     <vx-input-group class="mb-4">
-      <vs-input v-model="searchQuery" placeholder="Search..." @keyup.enter="searchMedia()" />
+      <vs-input
+        v-model="searchQuery"
+        placeholder="Search..."
+        @keyup.enter="searchMedia()"
+      />
       <template slot="append">
         <div class="append-text btn-addon">
           <vs-button
@@ -67,13 +71,13 @@ export default {
   name: 'SearchModal',
   props: ['sceneNum', 'showModal'],
   components: {
-    MediaPreview
+    MediaPreview,
   },
   data() {
     return {
       searchQuery: '',
       searchInProgress: false,
-      media: 'video'
+      media: 'video',
     };
   },
   computed: {
@@ -92,8 +96,8 @@ export default {
       },
       set(val) {
         this.$emit('update:showModal', val);
-      }
-    }
+      },
+    },
   },
   methods: {
     selectMedia(mediaObj) {
@@ -101,9 +105,9 @@ export default {
       this.$store.commit('studio/selectMedia', {
         value: {
           id: mediaObj.id,
-          url: mediaObj.url
+          url: mediaObj.url,
         },
-        sceneNum: this.sceneNum
+        sceneNum: this.sceneNum,
       });
     },
     /* selectImage(img, zoomType) {
@@ -144,34 +148,34 @@ export default {
         background: 'primary',
         color: '#fff',
         container: '#search-with-loading',
-        scale: 0.4
+        scale: 0.4,
       });
       const mediaType = this.media;
       const dataObj = {
         searchQuery: this.searchQuery,
         srcLang: this.$store.state.studio.video.language,
-        type: mediaType
+        type: mediaType,
       };
       this.$store
         .dispatch('studio/searchMedia', dataObj)
-        .then(res => {
+        .then((res) => {
           if (Object.keys(res.data).length === 0) {
             this.$vs.notify({
               title: 'Not Found',
               text: `Cannot find ${mediaType}s related to this keyword`,
-              color: 'danger'
+              color: 'danger',
             });
           } else {
             const dataObj = {
               sceneNum: this.sceneNum,
-              value: res.data
+              value: res.data,
             };
             mediaType === 'video'
               ? this.$store.commit('studio/setSearchedVideos', dataObj)
               : this.$store.commit('studio/setSearchedImages', dataObj);
           }
         })
-        .catch(err => {
+        .catch((err) => {
           console.log(err);
         })
         .finally(() => {
@@ -186,10 +190,10 @@ export default {
     addKeyword() {
       const payload = {
         keyword: this.searchQuery,
-        sceneNum: this.sceneNum
+        sceneNum: this.sceneNum,
       };
       this.$store.commit('studio/addKeyword', payload);
-    }
-  }
+    },
+  },
 };
 </script>

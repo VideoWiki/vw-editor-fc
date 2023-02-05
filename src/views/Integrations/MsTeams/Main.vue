@@ -1,8 +1,5 @@
 <template>
-  <vs-popup
-    ref="custom_teams_modal"
-    :active.sync="choiceModal"
-  >
+  <vs-popup ref="custom_teams_modal" :active.sync="choiceModal">
     <div class="p-2">
       <h2 class="font-extrabold mb-4">Select from following links</h2>
       <template v-for="(link, idx) in queryContent.links">
@@ -14,19 +11,12 @@
           noShadow
         >
           <div class="flex items-center -m-2">
-            <vs-icon
-              icon="language"
-              size="24px"
-              class="mr-2"
-            ></vs-icon>
-            <p
-              :title="link"
-              class="truncate ellipsis font-medium"
-            >
+            <vs-icon icon="language" size="24px" class="mr-2"></vs-icon>
+            <p :title="link" class="truncate ellipsis font-medium">
               {{ link }}
             </p>
-          </div>
-        </vx-card>
+          </div></vx-card
+        >
       </template>
       <vs-divider>Or</vs-divider>
       <p class="font-semibold">
@@ -45,31 +35,25 @@ export default {
       choiceModal: false,
       task_id: null,
       queryContent: {
-        links: [],
+        links: []
       },
-      requestInterval: Function,
+      requestInterval: Function
     };
   },
   computed: {
     uploadedDocumentIsPPT() {
       return this.$store.state.studio.isPPT;
-    },
+    }
   },
   mounted() {
     this.$refs.custom_teams_modal.$el.childNodes[1].childNodes[0].style.display =
       'none';
     if (this.$route.query.contentUrl) {
-      const { contentUrl, token, tempauth, Translate, ApiVersion } =
-        this.$route.query;
-      const getUrlInfo = async () => {
-        this.$Progress.start();
-        this.$vs.loading({ color: 'transparent' });
-        const publicUrl = await this.convertToPublic(contentUrl, token)
-        const file = publicUrl.split(".")
-        const fileExtn = file[file.length-1]
-        this.handleUrlSubmit(publicUrl, fileExtn);
-      };
-      getUrlInfo();
+      const { contentUrl, tempauth, Translate, ApiVersion } = this.$route.query;
+      const downloadUrl = tempauth
+        ? `${contentUrl}&Translate=${Translate}&tempauth=${tempauth}&ApiVersion=${ApiVersion}`
+        : contentUrl;
+      this.handleUrlSubmit(downloadUrl, this.$route.query.ext);
     }
     if (this.$route.query.attachments) {
       const attachmentList = this.$route.query.attachments.split(',');
@@ -85,7 +69,7 @@ export default {
       // console.log(parsedHtml);
       const anchorTagArray = parsedHtml.querySelectorAll('a');
       if (anchorTagArray) {
-        anchorTagArray.forEach((a) => {
+        anchorTagArray.forEach(a => {
           this.queryContent.links.push(a.href);
         });
         if (this.queryContent.links.length > 1) {
@@ -98,48 +82,25 @@ export default {
             color: 'primary',
             title: `Text too Long!`,
             acceptText: 'Okay',
-            text: 'The length of text in the message was too long. Kindly copy the text and paste it in the video script box.',
+            text:
+              'The length of text in the message was too long. Kindly copy the text and paste it in the video script box.'
           });
         }
       }
     } else if (this.$route.query.text) {
       this.$store.commit('studio/SET_VIDEO_ATTR', {
         key: 'script',
-        value: this.$route.query.text,
+        value: this.$route.query.text
       });
     }
   },
   methods: {
-    async convertToPublic(url, token) {
-      try{
-        const res = await fetch(`https://dev.editor.video.wiki/api/pdf_downloader?url=${url}&bearer_token=${token}`);
-        const data = await res.json();
-        return data.data
-      }catch(err){
-        console.log(err)
-      }
-    },
-
-    async getFileName(url, token) {
-      try {
-        console.log(url, token);
-        const res = await fetch(url, {
-          method: 'HEAD',
-          headers: {
-            'Authorization': `Bearer ${token}`,
-          }
-        });
-        const data = await res.headers.get("content-disposition").split("\"")[1];
-        return data;
-      } catch (err) {
-        console.log(err);
-      }
-    },
-
     handleUrlSubmit(contentUrl, ext) {
       if (ext === 'mp4') {
         this.contentUrl = contentUrl;
         this.$validator.reset();
+        this.$Progress.start();
+        this.$vs.loading({ color: 'transparent' });
         this.splitIntoChunks();
       } else {
         this.fetchContent(contentUrl, ext);
@@ -149,7 +110,7 @@ export default {
       const requestBody = {
         video_url: this.contentUrl,
         option: 'small',
-        task_id: this.task_id,
+        task_id: this.task_id
       };
       // console.log({ requestBody });
       try {
@@ -173,8 +134,8 @@ export default {
               indexs: index,
               value: {
                 id: null,
-                url: chunkUrl,
-              },
+                url: chunkUrl
+              }
             });
           });
           this.$store.commit('studio/setSentences', scenes);
@@ -195,7 +156,7 @@ export default {
         this.$vs.notify({
           title: 'Error',
           text: 'Fail to split video',
-          color: 'danger',
+          color: 'danger'
         });
         // this.$Progress.fail();
         this.$vs.loading.close();
@@ -206,7 +167,7 @@ export default {
       this.$vs.loading({ color: 'transparent' });
       this.$store
         .dispatch('studio/extractInfoFromUrl', { url, ext })
-        .then((data) => {
+        .then(data => {
           if (data.slides) {
             const scenes = {};
             /* const videos = {};
@@ -225,8 +186,8 @@ export default {
                   indexs: index,
                   value: {
                     id: null,
-                    url: img_path,
-                  },
+                    url: img_path
+                  }
                 });
               }
             );
@@ -236,19 +197,19 @@ export default {
             // this.$store.commit('studio/setImages', images);
             this.$store.commit('studio/SET_VIDEO_ATTR', {
               key: 'script',
-              value: data.script,
+              value: data.script
             });
           }
           if (data.title) {
             this.$store.commit('studio/SET_VIDEO_ATTR', {
               key: 'title',
-              value: data.title,
+              value: data.title
             });
           }
           if (data.text) {
             this.$store.commit('studio/SET_VIDEO_ATTR', {
               key: 'script',
-              value: data.text,
+              value: data.text
             });
           }
           if (this.uploadedDocumentIsPPT) {
@@ -259,9 +220,7 @@ export default {
                   ({ img_path, keywords }, index) => {
                     this.$store.commit('studio/setSearchedImages', {
                       sceneNum: index,
-                      value: [
-                        { id: null, url: img_path, current_tag: 'slide' },
-                      ],
+                      value: [{ id: null, url: img_path, current_tag: 'slide' }]
                     });
                   }
                 );
@@ -284,14 +243,14 @@ export default {
           this.$vs.notify({
             title: 'Invalid URL',
             text: 'No text found',
-            color: 'danger',
+            color: 'danger'
           });
         });
     },
     onSelectLink(idx) {
       this.choiceModal = false;
       this.fetchContent(this.queryContent.links[idx]);
-    },
-  },
+    }
+  }
 };
 </script>

@@ -19,7 +19,7 @@
         >Connect wallet</vs-button
         > -->
       <Metamaskbtn :payload="this.payload" />
-      <p class="pt-4">
+      <p>
         Your wallet information is not mapped to your email or name. It is saved
         with encryption and only used for the airdrop configured by the event
         admin.

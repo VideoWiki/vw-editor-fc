@@ -1,6 +1,16 @@
+<!-- =========================================================================================
+    File Name: Dashboard.vue
+    Description: Knowledge Base Page
+    ----------------------------------------------------------------------------------------
+    Item Name: Vuexy - Vuejs, HTML & Laravel Admin Dashboard Template
+      Author: Pixinvent
+    Author URL: http://www.themeforest.net/user/pixinvent
+========================================================================================== -->
+
 <template>
   <div id="knowledge-base-page" class="">
     <!-- JUMBOTRON -->
+
     <div class="section flex flex-wrap bg-white">
       <div class="lg:w-1/2 w-full lg:text-left text-center">
         <h1 class="lg:text-7xl font-extrabold mb-8 mt-2 text-5xl">
@@ -18,6 +28,14 @@
             >{{ $t('Landing.Welcome.button') }}</vs-button
           >
         </div>
+        <!-- <div class="lg:text-left text-center">
+          <vs-button
+            type="filled"
+            class="bg-custom-purple text-base font-bold"
+            @click="download"
+            >{{ $t('Landing.Welcome.button') + 123 }}</vs-button
+          >
+        </div> -->
       </div>
       <div class="lg:w-1/2 hidden md:hidden sm:hidden lg:block">
         <img src="@/assets/images/landing-page/Frame1.svg" />
@@ -448,6 +466,7 @@
 <script>
 import NewsLetter from './components/NewsLetter';
 import axios from '../axios';
+import ConnectWallet from '@/blockchain/Download.js';
 
 // import { teamList } from './components/localDb';
 // import MemberCard from './components/MemberCard';
@@ -540,6 +559,9 @@ export default {
       'https://videowikistorage.blob.core.windows.net/vw-videos/videowiki_features_explained.mp4';
   },
   methods: {
+    download() {
+      this.$store.dispatch('studio/download');
+    },
     isClosed(idx) {
       if (this.$refs[`collapse_${idx}`][0].maxHeight === '0px') return true;
       return false;

@@ -18,7 +18,7 @@
                 id="display-profile-upload"
                 color="primary"
                 :text="getFirstLetter(userInfo.first_name)"
-                :src="userInfo.profile_pic ? userInfo.profile_pic : null"
+                :src="userInfo.profile_image ? userInfo.profile_image : null"
                 size="70px"
               />
               <div>
@@ -75,7 +75,7 @@
                 <vs-input
                   class="w-full"
                   :label="$t('Profile.name.user')"
-                  :disabled="true"
+                  :disabled="!editMode"
                   v-model="userInfo.username"
                 />
               </div>
@@ -176,7 +176,6 @@
 import TheHeader from '@/layouts/components/navbar/TheNavbarHorizontal';
 import { ajaxCallMixin } from '@/http/HttpCommon';
 import { utils } from '@/mixins/index';
-import constants from '../../constant';
 
 export default {
   name: 'Profile',
@@ -197,7 +196,6 @@ export default {
   },
   mounted() {
     this.userInfo = { ...this.$store.state.AppActiveUser };
-    console.log(this.userInfo);
   },
   methods: {
     openUpload() {
@@ -206,20 +204,12 @@ export default {
     uploadFile(event) {
       const selectedFile = event.target.files[0];
       this.uploadedImageBlob = selectedFile;
-      this.userInfo.profile_pic = URL.createObjectURL(selectedFile);
-      console.log(this.userInfo);
+      this.userInfo.profile_image = URL.createObjectURL(selectedFile);
       event.target.value = '';
     },
     removeDisplayProfile() {
-      this.userInfo = { ...this.userInfo, profile_pic: '' };
+      this.userInfo = { ...this.userInfo, profile_image: '' };
       this.uploadedImageBlob = null;
-    },
-    logout() {
-      this.$cookies.remove('userId');
-      this.$cookies.remove('Token');
-
-      localStorage.clear();
-      return this.$store.dispatch('auth/logOut');
     },
     handleProfileEdit() {
       if (!this.editMode) {
@@ -227,28 +217,25 @@ export default {
       } else {
         this.$vs.loading();
         const payload = {
-          fname: this.userInfo.first_name,
-          lname: this.userInfo.last_name,
-          user_name: this.userInfo.username,
-          p_image: this.uploadedImageBlob ? this.uploadedImageBlob : '',
-          email: this.userInfo.email,
+          first_name: this.userInfo.first_name,
+          last_name: this.userInfo.last_name,
+          username: this.userInfo.username,
+          profile_image: this.uploadedImageBlob ? this.uploadedImageBlob : '',
         };
+        /* if (this.uploadedImageBlob) {
+          payload.profile_image = this.uploadedImageBlob;
+        } */
         this.$store
           .dispatch('auth/updateUserDetails', payload)
           .then((res) => {
-            console.log(1);
             this.editMode = false;
-            console.log(2);
-            this.userInfo.profile_pic = res.data.profile_image;
-            console.log(3);
+            this.userInfo.profile_image = res.data.user_data.profile_image;
             this.$store.commit('UPDATE_USER_INFO', this.userInfo);
-            console.log(4);
             this.$vs.notify({
               title: 'Success',
               text: 'Changes Saved',
               color: 'success',
             });
-            this.logout();
           })
           .catch(() => {
             this.$vs.notify({
@@ -282,7 +269,6 @@ export default {
               this.newPassword = '';
               this.confirmPassword = '';
               this.$validator.reset();
-              this.logout();
             })
             .catch((error) => {
               this.$vs.notify({

@@ -7,7 +7,7 @@
       class="scene-card vs-con-loading__container"
       :class="{
         activeScene:
-          $store.state.studio.currentActiveScene === parseInt(indexs) + 1
+          $store.state.studio.currentActiveScene === parseInt(indexs) + 1,
       }"
     >
       <template v-if="selectedFromLibraryMedia[parseInt(indexs)]">
@@ -16,6 +16,7 @@
         </p>
         <div v-if="!!addedAudioVideos[parseInt(indexs)]" class="mb-base">
           <video
+            crossorigin="anonymous"
             width="100%"
             height="auto"
             controls
@@ -31,6 +32,7 @@
           class="mb-base"
         >
           <video
+            crossorigin="anonymous"
             width="100%"
             height="auto"
             controls
@@ -45,6 +47,7 @@
             v-if="isImageUrl(selectedFromLibraryMedia[parseInt(indexs)].url)"
           >
             <video
+              crossorigin="anonymous"
               v-if="selectedFromLibraryMedia[parseInt(indexs)].animationUrl"
               width="100%"
               height="auto"
@@ -60,6 +63,7 @@
             />
           </template>
           <video
+            crossorigin="anonymous"
             v-else
             width="100%"
             height="auto"
@@ -96,7 +100,7 @@ export default {
   components: { AudioRecorder },
   data() {
     return {
-      constants
+      constants,
     };
   },
   computed: {
@@ -111,7 +115,7 @@ export default {
     },
     insideIframe() {
       return this.$store.state.insideIframe;
-    }
+    },
   },
   mounted() {
     window.addEventListener('scroll', this.updateScroll);
@@ -122,7 +126,7 @@ export default {
   },
   destroyed() {
     window.removeEventListener('scroll', this.updateScroll);
-  }
+  },
 };
 </script>
 

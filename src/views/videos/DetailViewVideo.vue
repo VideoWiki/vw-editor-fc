@@ -15,6 +15,7 @@
               >
                 <div class="product-img-container w-3/5 mx-auto mb-10 md:mb-0">
                   <video
+                    crossorigin="anonymous"
                     width="100%"
                     height="auto"
                     :src="item_data.url"
@@ -147,7 +148,7 @@ import constants from '../../../constant';
 export default {
   name: 'DetailViewVideo',
   components: {
-    StarRating
+    StarRating,
   },
   data() {
     return {
@@ -163,24 +164,24 @@ export default {
         '#28C76F',
         '#EA5455',
         '#FF9F43',
-        '#1E1E1E'
+        '#1E1E1E',
       ],
       opt_color: '#7367F0',
-      is_hearted: false
+      is_hearted: false,
     };
   },
   computed: {
     itemColor() {
-      return obj => {
+      return (obj) => {
         const style_obj = {};
 
-        obj.style.forEach(p => {
+        obj.style.forEach((p) => {
           style_obj[p] = obj.color;
         });
 
         return style_obj;
       };
-    }
+    },
   },
   methods: {
     forkVideo() {
@@ -195,7 +196,7 @@ export default {
     fetch_item_details(id) {
       axios
         .get(constants.apiUrl + '/api/videos?slug=' + id)
-        .then(response => {
+        .then((response) => {
           response = response.data || response;
           response = response.results;
           if (response.length) {
@@ -204,15 +205,15 @@ export default {
             this.$router.push('/error/404');
           }
         })
-        .catch(error => {
+        .catch((error) => {
           console.log(error);
           this.$router.push('/error/404');
         });
-    }
+    },
   },
   created() {
     this.fetch_item_details(this.$route.params.slug);
-  }
+  },
 };
 </script>
 

@@ -1,21 +1,13 @@
 <template>
-  <div >
-    
-    
-    <span
-      v-if="teamsInitialized===true"
-      
-      ></span
-    > 
-     <vs-button 
+  <div>
+    <span v-if="teamsInitialized === true"></span>
+    <vs-button
       v-else-if="!this.$store.state.isWalletConnected"
-      
       class="text-base font-bold"
       type="filled"
       @click="connect"
       >Connect Wallet</vs-button
     >
-    
 
     <div v-else>
       <vs-dropdown vs-custom-content class="cursor-pointer">
@@ -33,7 +25,7 @@
             color="success"
             size="18px"
             class="absolute"
-            style="left: 3%;"
+            style="left: 3%"
           />
         </div>
         <vs-dropdown-menu class="vx-navbar-dropdown">
@@ -59,59 +51,35 @@
   </div>
 </template>
 <script>
-
-  
-
-
-
-
-
-import * as microsoftTeams from "@microsoft/teams-js";
+import * as microsoftTeams from '@microsoft/teams-js';
 
 export default {
-  
   name: 'Wallet',
-    created() {
-       
-  
-var teamsInitialized = false;
-microsoftTeams.initialize(() => {
-  teamsInitialized = true;
-});
+  created() {
+    var teamsInitialized = false;
+    microsoftTeams.initialize(() => {
+      teamsInitialized = true;
+    });
 
-setTimeout(() => {
-  
-   if(teamsInitialized) {
-     this.teamsInitialized = true;
-    
-    
-   
-   } else {
-    
-     
-     
-    
-   
-   
-   }
-},0 );
+    setTimeout(() => {
+      if (teamsInitialized) {
+        this.teamsInitialized = true;
+      } else {
+      }
+    }, 0);
   },
   computed: {
     accountAddress() {
       return this.$store.state.accountAddress;
     },
-
-  
   },
-  data(){
-return {
-  vivek: false,
-  teamsInitialized:false,
-}
+  data() {
+    return {
+      vivek: false,
+      teamsInitialized: false,
+    };
   },
   methods: {
-   
-    
     connect() {
       this.$store.dispatch('connectWallet');
     },
@@ -122,12 +90,5 @@ return {
       return addressString.slice(0, 6) + '...' + addressString.slice(38);
     },
   },
-
-  
 };
-
-
-
-
 </script>
-

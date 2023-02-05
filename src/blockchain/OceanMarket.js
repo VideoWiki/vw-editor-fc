@@ -12,6 +12,7 @@ import {
   fixedRateExchange,
   ZERO_ADDRESS,
 } from '@oceanprotocol/lib';
+import constants from '../../constant';
 
 const chainId = 5;
 const algorithmContainerPresets = [
@@ -82,7 +83,7 @@ function getOceanConfig(network) {
       network === 'gaiaxtestnet' ||
       network === 2021000
       ? undefined
-      : '418d1d91f132479ebcc600dab6dbbd3f'
+      : constants.infuraId
   );
   return config;
 }

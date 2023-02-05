@@ -25,6 +25,6 @@ export default {
     // if (auth.isAuthenticated()) isAuthenticated = true
     // else isAuthenticated = false
 
-    return JSON.parse(localStorage.getItem('userInfo')) && isAuthenticated;
-  },
+    return localStorage.getItem('userInfo') && isAuthenticated;
+  }
 };

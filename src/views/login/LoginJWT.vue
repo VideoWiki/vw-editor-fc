@@ -44,19 +44,11 @@ export default {
   mounted() {
     this.initilizeGAuth();
   },
-  created() {
-    if (performance.navigation.type === performance.navigation.TYPE_RELOAD) {
-      // alert();
-      // window.location.href =
-      //   'https://login.vwtv.pt/oauth2/auth?audience=&max_age=0&nonce=cbcvurctcddwfhzsnltwyz343&prompt=&redirect_uri=https://cast.video.wiki/callback/&response_type=code&scope=openid+offline&state=dsfssfsfsfsfslmksmf&client_id=cast-videowiki-client-1';
-    }
-  },
   methods: {
     checkLogin() {
       // If user is already logged in notify
       if (this.$store.state.auth.isUserLoggedIn()) {
         // Close animation if passed as payload
-        // this.$vs.loading.close()
 
         this.$vs.notify({
           title: this.$t('Login.notify.title'),
@@ -106,14 +98,14 @@ export default {
             response.data.accessToken,
             null,
             null,
-            'https://class.video.wiki'
+            'https://room.video.wiki'
           );
           this.$cookies.set(
             'userId',
             response.data.usersData.id,
             null,
             null,
-            'https://class.video.wiki'
+            'https://room.video.wiki'
           );
 
           window.dataLayer = window.dataLayer || [];
@@ -188,14 +180,14 @@ export default {
                 res.data.accessToken,
                 null,
                 null,
-                'https://class.video.wiki'
+                'https://room.video.wiki'
               );
               this.$cookies.set(
                 'userId',
                 res.data.usersData.id,
                 null,
                 null,
-                'https://class.video.wiki'
+                'https://room.video.wiki'
               );
 
               this.$acl.change(this.activeUserInfo.userRole);
@@ -259,7 +251,6 @@ export default {
     },
     // Google Login
     initilizeGAuth() {
-      console.log('11');
       const gauthOption = {
         clientId:
           '819083977574-sq0gi88sfdb5skebh2kjk62t41nuegfv.apps.googleusercontent.com',
@@ -276,7 +267,7 @@ export default {
       try {
         const googleUser = await this.$gAuth.signIn();
         if (googleUser) {
-          this.gAccessToken = googleUser.getAuthResponse().access_token;
+          this.gAccessToken = googleUser.vc.access_token;
           this.$store
             .dispatch('auth/sendAccessToken', {
               access_token: this.gAccessToken,
@@ -301,14 +292,14 @@ export default {
                 res.data.accessToken,
                 null,
                 null,
-                'https://class.video.wiki'
+                'https://room.video.wiki'
               );
               this.$cookies.set(
                 'userId',
                 res.data.usersData.id,
                 null,
                 null,
-                'https://class.video.wiki'
+                'https://room.video.wiki'
               );
 
               this.$acl.change(this.activeUserInfo.userRole);
@@ -344,6 +335,7 @@ export default {
 .modified-input {
   height: 60px;
   border: none;
+  /* border-radius: 16px; */
   background: #f3f3f3;
   font-family: Montserrat;
   border-radius: 4px;

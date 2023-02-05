@@ -1,56 +1,26 @@
 <!-- eslint-disable prettier/prettier -->
 <template>
-  <div v-if="haveLoginOptions">
-	<h2 class="text-center">Sign in <strong>VideoWiki<br></strong></h2>
-	<p class="mb-12 mt-2 text-center" style="color: black; font-size: 20px">Choose a account</p>
-	<div class="">
-	    <div v-for="(item,key,index) in loginOptions" class="w-full cursor-pointer flex border justify-between">
-      <div @click="autoLogin(key,item.token)" class="con-img ml-3 my-1 pt-2 px-2">
-        <vs-avatar
-          :text="getFirstLetter(key)"
-          color="primary"
-          class="m-0 shadow-md"
-          :src="activeUserInfo.profile_pic ? activeUserInfo.profile_pic : ''"
-          size="40px"
+  <!-- use the buttons prop for login modes buttons is array of json with link, color, text and description and percentage -->
+  <!-- set prop linkMode to value if you dont want to visit a new page on button click -->
+  <div>
+    <h2 class="heading text-2xl md:text-4xl">Choose your <strong>login type </strong></h2>
+    <!-- <v-popover offset="16">
+      <button v-tooltip="'You have new messages.'" class="tooltip-target b3">
+        Click me
+      </button>
+
+     <template slot="popover">
+        <input
+          class="tooltip-content"
+          v-model="msg"
+          placeholder="Tooltip content"
         />
-      </div>
-      <div @click="autoLogin(key,item.token)" class="mt-2 px-8 w-10/12 h-full">
-        <h5 class="w-full">{{ key }}</h5>
-        <p>{{ item.name }}</p>
-      </div>
-      <div
-      class="w-2/10 pt-2" @click="deleteUser(key)">
-        <vs-tooltip text="Remove Account">
-                              <span></span>
-	                        <vs-icon
-                            icon-pack="feather"
-                            icon="icon-minus-circle"
-                            class="cursor hover"
-                            size="24px"
-                            rounded="true"
-                          >
-                          </vs-icon>
-                        </vs-tooltip>
-      </div>
-    </div>	
-	</div>
-  <div class="pt-0" >
-  <p class="pt-4 font-semibold">   
-    <span class="cursor-pointer" @click="haveLoginOptions= false">
-    <vs-icon 
-    icon-pack="feather"
-    icon="icon-user"
-    class="px-6 py-2"
-    size="26px"
-    rounded="rounded-lg"
-    color="primary" >
-    </vs-icon>
-     Use other Account</span>
-  </p>
-  </div>
-</div>
-  <div v-else>
-    <h2 class="heading">Choose VideoWiki <strong>login type</strong></h2>
+        <p>
+          {{ msg }}
+        </p>
+
+       </template>
+    </v-popover> -->
     <div
       class="bar"
       :style="{
@@ -96,12 +66,10 @@
 
 <script>
 import Private from './Private.vue';
+import Vue from 'vue';
 import Public from './Public.vue';
-import { utils } from '@/mixins/index';
 import Restricted from './Restricted.vue';
-
 export default {
-  mixins: [utils],
   name: 'LoginModes',
   components: {
     Private,
@@ -132,12 +100,12 @@ export default {
           link: 'Google Login',
           color: '#4CD964',
           percent: '50%',
-          description: 'Login using your Google Profile',
+          description: 'Login using your Social Profile',
         },
         {
           text: 'Web3',
           link: 'Wallet Login',
-          color: '#7247c4',
+          color: '#F30200',
           percent: '100%',
           description: 'Login With Crypto Wallet',
         },
@@ -151,17 +119,12 @@ export default {
   data() {
     return {
       currentButton: '',
-      haveLoginOptions: false,
-      loginOptions: JSON.parse(localStorage.getItem('otherAccount')),
       currentI: 0,
       proxyValue: '',
       msg: '',
     };
   },
   computed: {
-    activeUserInfo() {
-      return this.$store.state.AppActiveUser;
-    },
     currentValue() {
       if (this.linkMode) {
         return this.$route.name;
@@ -183,64 +146,14 @@ export default {
     if (!this.linkMode) {
       this.proxyValue = this.value;
     }
-    this.haveLoginOptions =this.loginOptions && (Object.keys(this.loginOptions).length>0);
-	console.log("have",JSON.stringify(this.loginOptions))
     this.getcurrent();
   },
   methods: {
-    async deleteUser(user){
-	this.$delete(this.loginOptions,user)
-	if(Object.keys(this.loginOptions).length===0){
-		this.haveLoginOptions = false
-	}
-	localStorage.setItem('otherAccount',JSON.stringify(this.loginOptions))
-    },
-    autoLogin(username,token) {
-      var payload = {
-        username: username,
-        lc: this.$route.query.login_challenge,
-	token: token
-      };
-      this.$vs.loading();
-      this.$store
-        .dispatch('auth/autoLogin', payload)
-        .then((res) => {
-          console.log(res.data);
-          location.href = res.data.redirect_to;
-          this.$vs.loading.close();
-        })
-        .catch((e) => {
-          console.log(e);
-          this.$vs.notify({
-            title: 'Challenge Expired',
-            text: 'Try Again',
-            color: 'danger',
-          });
-          this.$vs.loading.close();
-          location.href = constants.challengeUri;
-        });
-      // axios
-      //   .get(
-      //     `${constants.hydra_ep}/api/auto/login?username=${this.activeUserInfo.username}&login_challenge=${this.$route.query.login_challenge}`
-      //   )
-      //   .then((res) => {
-      //     console.log(this.res);
-      //   })
-      //   .catch((e) => {
-      //     console.log('e', e);
-      //   });
-    },
     nextStep(link) {
       if (this.linkMode) {
-        this.$router.push(
-          {
-            name: link,
-            query: { login_challenge: this.$route.query.login_challenge },
-          },
-          () => {
-            this.proxyValue = link;
-          }
-        );
+        this.$router.push({ name: link }, () => {
+          this.proxyValue = link;
+        });
       } else {
         this.proxyValue = link;
       }
@@ -265,7 +178,7 @@ button {
 }
 .heading {
   font-weight: 500;
-  font-size: 28px;
+  font-size: 32px;
   text-align: left;
   margin-top: 2rem;
   margin-bottom: 3rem;
@@ -286,7 +199,7 @@ button {
   box-shadow: 0px 2px 8px rgba(243, 2, 0, 0.25);
 }
 .bar {
-  background: linear-gradient(to right,var(--color, blue) var(--percentage),#d2d6d9 var(--percentage));
+  background: linear-gradient(to right,var(--color, blue) var(--percentage), #d2d6d9 var(--percentage));
   display: flex;
   margin: 2rem 0;
   justify-content: space-between;
@@ -303,15 +216,6 @@ button {
   padding: 0px;
   background-color: #d2d6d9;
   border: #d2d6d9;
-}
-
-.hover:hover{
-	color: red;
-}
-
-.border{
-padding-bottom: 8px;
-border-bottom: 1px solid black;
 }
 </style>
 

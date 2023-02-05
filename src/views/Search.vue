@@ -10,7 +10,7 @@
 <template>
   <div id="search-page">
     <div class="search-page__search-bar flex items-center">
-      <vs-input 
+      <vs-input
         icon-no-border
         placeholder="Search"
         v-model="searchQuery"
@@ -62,7 +62,7 @@
             <span>Any Time</span>
             <feather-icon
               icon="ChevronDownIcon"
-              style="width:1rem; height:1rem"
+              style="width: 1rem; height: 1rem"
               class="cursor-pointer"
             ></feather-icon>
           </span>
@@ -82,7 +82,7 @@
             <span>All Results</span>
             <feather-icon
               icon="ChevronDownIcon"
-              style="width:1rem; height:1rem"
+              style="width: 1rem; height: 1rem"
               class="cursor-pointer"
             ></feather-icon>
           </span>
@@ -319,42 +319,42 @@ export default {
         info: [
           { title: '1,367', subtitle: 'Sales' },
           { title: '74', subtitle: 'Comments' },
-          { title: '5', subtitle: 'Ratings' }
+          { title: '5', subtitle: 'Ratings' },
         ],
         externalLink: {
           title: 'View on Themeforest',
           icon: 'ExternalLinkIcon',
-          url: 'https://1.envato.market/modern_admin'
+          url: 'https://1.envato.market/modern_admin',
         },
         resultMetaList: [
           { name: 'Bootstrap', value: 'v4.13 updated' },
           { name: 'Created', value: 'Mar 8 2018' },
           { name: 'Last Update', value: 'Nov 28 2018' },
           { name: 'Documentation', value: 'Well Documented' },
-          { name: 'Layout', value: 'Responsive' }
+          { name: 'Layout', value: 'Responsive' },
         ],
         suggestedSearches: [
           {
             name: 'Apex',
             img: require('@/assets/images/pages/1-apex.png'),
-            url: 'https://1.envato.market/apex_admin'
+            url: 'https://1.envato.market/apex_admin',
           },
           {
             name: 'Convex',
             img: require('@/assets/images/pages/3-convex.png'),
-            url: 'https://1.envato.market/convex_angular_admin'
+            url: 'https://1.envato.market/convex_angular_admin',
           },
           {
             name: 'Materialize',
             img: require('@/assets/images/pages/4-materialize.png'),
-            url: 'https://1.envato.market/materialize_admin'
+            url: 'https://1.envato.market/materialize_admin',
           },
           {
             name: 'Stack',
             img: require('@/assets/images/pages/2-stack.png'),
-            url: 'https://1.envato.market/stack_admin'
-          }
-        ]
+            url: 'https://1.envato.market/stack_admin',
+          },
+        ],
       },
       searchResults: [
         {
@@ -363,7 +363,7 @@ export default {
           resultUrl: 'https://1.envato.market/pixinvent_portfolio',
           metaData: {
             ratings: 5,
-            info: ['25 reviews', '25.00 USD', 'In Stock']
+            info: ['25 reviews', '25.00 USD', 'In Stock'],
           },
           time: 'Mon Dec 10 2018 07:45:00 GMT+0000 (GMT)',
           description:
@@ -373,39 +373,39 @@ export default {
               title: 'Dashboard',
               url: 'https://1.envato.market/modern_admin',
               description:
-                'Halvah marzipan icing chocolate caramels candy canes carrot cake dragée apple pie. Croissant oat cake gummies biscuit.'
+                'Halvah marzipan icing chocolate caramels candy canes carrot cake dragée apple pie. Croissant oat cake gummies biscuit.',
             },
             {
               title: 'UI Components',
               url: 'https://1.envato.market/modern_admin',
               description:
-                'Brownie lollipop chocolate bar chocolate cake macaroon. Bonbon chocolate tootsie roll chocolate.'
+                'Brownie lollipop chocolate bar chocolate cake macaroon. Bonbon chocolate tootsie roll chocolate.',
             },
             {
               title: 'Form Elements',
               url: 'https://1.envato.market/modern_admin',
               description:
-                'Lollipop cake wafer. Candy chocolate toffee icing. Chocolate cake cupcake toffee chupa chups topping.'
+                'Lollipop cake wafer. Candy chocolate toffee icing. Chocolate cake cupcake toffee chupa chups topping.',
             },
             {
               title: 'Support',
               url: 'https://1.envato.market/modern_admin',
               description:
-                'Carrot cake sweet soufflé cake bear claw lollipop. Muffin sugar plum chupa chups liquorice cotton candy halvah danish cake.'
+                'Carrot cake sweet soufflé cake bear claw lollipop. Muffin sugar plum chupa chups liquorice cotton candy halvah danish cake.',
             },
             {
               title: 'Charts',
               url: 'https://1.envato.market/modern_admin',
               description:
-                'Gingerbread chupa chups toffee jelly chocolate cake tiramisu marshmallow. Donut tiramisu chocolate marshmallow.'
+                'Gingerbread chupa chups toffee jelly chocolate cake tiramisu marshmallow. Donut tiramisu chocolate marshmallow.',
             },
             {
               title: 'Documentation',
               url: 'https://1.envato.market/modern_admin',
               description:
-                'Powder brownie candy toffee soufflé. Gingerbread sweet roll gingerbread icing macaroon.'
-            }
-          ]
+                'Powder brownie candy toffee soufflé. Gingerbread sweet roll gingerbread icing macaroon.',
+            },
+          ],
         },
         {
           title: 'Attire bench - Quick win shoot me an email',
@@ -414,11 +414,11 @@ export default {
           resultImg: require('@/assets/images/pages/search-result.jpg'),
           metaData: {
             ratings: 4.5,
-            info: ['17 reviews', '12 votes', '28.00 USD', 'In Stock']
+            info: ['17 reviews', '12 votes', '28.00 USD', 'In Stock'],
           },
           time: 'Mon Feb 23 2017 07:45:00 GMT+0000 (GMT)',
           description:
-            'Tiramisu soufflé gummies ice cream liquorice gingerbread sweet roll. Cake cotton candy candy ice cream muffin donut soufflé danish. Dessert jelly beans wafer cheesecake. Sugar plum gingerbread caramels candy canes gummi bears bear claw donut. Oat cake cookie tiramisu sweet halvah sugar plum. Dessert danish oat cake.'
+            'Tiramisu soufflé gummies ice cream liquorice gingerbread sweet roll. Cake cotton candy candy ice cream muffin donut soufflé danish. Dessert jelly beans wafer cheesecake. Sugar plum gingerbread caramels candy canes gummi bears bear claw donut. Oat cake cookie tiramisu sweet halvah sugar plum. Dessert danish oat cake.',
         },
         {
           title: 'The Table - for what do you feel you would',
@@ -427,25 +427,28 @@ export default {
           resultVideo: [
             {
               sources: [
-                { type: 'video/mp4', src: 'http://vjs.zencdn.net/v/oceans.mp4' }
+                {
+                  type: 'video/mp4',
+                  src: 'http://vjs.zencdn.net/v/oceans.mp4',
+                },
               ],
               poster:
-                'https://surmon-china.github.io/vue-quill-editor/static/images/surmon-1.jpg'
-            }
+                'https://surmon-china.github.io/vue-quill-editor/static/images/surmon-1.jpg',
+            },
           ],
           metaData: {
-            info: ['1M Views', 'Uploaded by PlayStation']
+            info: ['1M Views', 'Uploaded by PlayStation'],
           },
           time: 'Mon Jun 25 2016 07:45:00 GMT+0000 (GMT)',
           description:
-            'Tiramisu soufflé gummies ice cream liquorice gingerbread sweet roll. Cake cotton candy candy ice cream muffin donut soufflé danish. Dessert jelly beans wafer cheesecake. Sugar plum gingerbread caramels candy canes gummi bears bear claw donut. Oat cake cookie tiramisu sweet halvah sugar plum. Dessert danish oat cake.'
+            'Tiramisu soufflé gummies ice cream liquorice gingerbread sweet roll. Cake cotton candy candy ice cream muffin donut soufflé danish. Dessert jelly beans wafer cheesecake. Sugar plum gingerbread caramels candy canes gummi bears bear claw donut. Oat cake cookie tiramisu sweet halvah sugar plum. Dessert danish oat cake.',
         },
         {
           title: 'Microdosing - deep v actually schlitz chia',
           linkUrl: 'https://1.envato.market/modern_admin',
           resultUrl: 'https://1.envato.market/pixinvent_portfolio',
           description:
-            'Wafer liquorice sweet roll jelly beans cake soufflé. Oat cake marzipan chocolate cake sesame snaps jujubes. Dragée biscuit dessert. Chocolate muffin wafer. Sugar plum icing tootsie roll gummi bears marzipan candy canes biscuit.'
+            'Wafer liquorice sweet roll jelly beans cake soufflé. Oat cake marzipan chocolate cake sesame snaps jujubes. Dragée biscuit dessert. Chocolate muffin wafer. Sugar plum icing tootsie roll gummi bears marzipan candy canes biscuit.',
         },
         {
           title: 'Aesthetic neutra freegan, mlkshk literally',
@@ -453,7 +456,7 @@ export default {
           resultUrl: 'https://1.envato.market/pixinvent_portfolio',
           time: 'Mon Jun 30 2017 10:30:00 GMT+0000 (GMT)',
           description:
-            'Donut jelly cake chupa chups powder chocolate cake cheesecake. Wafer macaroon sweet roll gingerbread cheesecake gummi bears. Marzipan jujubes sweet roll tootsie roll cookie apple pie brownie bear claw jelly beans.'
+            'Donut jelly cake chupa chups powder chocolate cake cheesecake. Wafer macaroon sweet roll gingerbread cheesecake gummi bears. Marzipan jujubes sweet roll tootsie roll cookie apple pie brownie bear claw jelly beans.',
         },
         {
           title: 'iCell - disrupt butcher pitchfork.',
@@ -461,14 +464,14 @@ export default {
           resultUrl: 'https://1.envato.market/pixinvent_portfolio',
           time: 'Mon DEC 12 2015 08:39:00 GMT+0000 (GMT)',
           description:
-            'Cake fruitcake cake caramels jelly beans chocolate bar. Macaroon gingerbread pastry. Gummies ice cream chocolate lollipop brownie cotton candy. Topping cotton candy brownie. Cake tiramisu macaroon sugar plum. Sweet cotton candy powder tootsie roll candy gummies brownie lollipop. Sweet muffin pudding.'
-        }
-      ]
+            'Cake fruitcake cake caramels jelly beans chocolate bar. Macaroon gingerbread pastry. Gummies ice cream chocolate lollipop brownie cotton candy. Topping cotton candy brownie. Cake tiramisu macaroon sugar plum. Sweet cotton candy powder tootsie roll candy gummies brownie lollipop. Sweet muffin pudding.',
+        },
+      ],
     };
   },
   computed: {
     playerOptions() {
-      return media => {
+      return (media) => {
         return {
           height: '360',
           fluid: true,
@@ -478,15 +481,15 @@ export default {
           language: 'en',
           playbackRates: [0.7, 1.0, 1.5, 2.0],
           sources: media.sources,
-          poster: media.poster
+          poster: media.poster,
         };
       };
-    }
+    },
   },
   methods: {},
   components: {
-    videoPlayer
-  }
+    videoPlayer,
+  },
 };
 </script>
 

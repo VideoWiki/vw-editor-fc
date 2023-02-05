@@ -2,6 +2,7 @@
   <vx-card class="video-card-inner cursor-pointer">
     <div slot="no-body" class="relative">
       <img
+        crossorigin="anonymous"
         :src="prop.video.thumbnail"
         @error="$event.target.src = defaultImg"
         alt="Not Found"
@@ -62,7 +63,7 @@
           color="primary"
           size="medium"
           class="mr-3"
-          :src="prop.profile_pic ? prop.user.profile_pic : ''"
+          :src="prop.user.profile_image ? prop.user.profile_image : ''"
         />
         <div>
           <div class="text-dark text-sm">
@@ -109,8 +110,7 @@ export default {
   },
   computed: {
     fullName() {
-      console.log(this.prop);
-      return this.prop.first_name + ' ' + this.prop.last_name;
+      return this.prop.user.first_name + ' ' + this.prop.user.last_name;
     },
     baseUrl() {
       return constants.apiUrl;
@@ -191,6 +191,10 @@ export default {
   &:hover {
     transform: translateY(-5px);
     box-shadow: 0px 4px 25px 0px rgba(0, 0, 0, 0.25);
+
+    /*:img {
+      opacity: 0.9;
+    }*/
   }
 }
 .card-body {
@@ -245,7 +249,9 @@ export default {
   padding: 5px 5px;
   position: absolute;
   z-index: 1000;
+  /* bottom: 125%;*/
   left: 50%;
+  /*margin-left: -60px; */
   opacity: 0;
   transition: opacity 0.3s;
 }

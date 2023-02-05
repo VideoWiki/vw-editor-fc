@@ -44,9 +44,25 @@ export default {
     this.initilizeGAuth();
   },
   methods: {
+    checkLogin() {
+      // If user is already logged in notify
+      if (this.$store.state.auth.isUserLoggedIn()) {
+        // Close animation if passed as payload
+        // this.$vs.loading.close()
+        this.$vs.notify({
+          title: this.$t('Login.notify.title'),
+          text: this.$t('Login.notify.text'),
+          iconPack: 'feather',
+          icon: 'icon-alert-circle',
+          color: 'warning',
+        });
+
+        return false;
+      }
+      return true;
+    },
     // Google Login
     initilizeGAuth() {
-      console.log(0);
       const gauthOption = {
         clientId:
           '819083977574-sq0gi88sfdb5skebh2kjk62t41nuegfv.apps.googleusercontent.com',
@@ -57,33 +73,59 @@ export default {
       Vue.use(GAuth, gauthOption);
     },
     async loginWithGoogle() {
-      console.log(89);
-      console.log(1);
+      if (!this.checkLogin()) return;
       // Loading
       this.$vs.loading();
       try {
-        console.log(2);
+        console.log(1);
         const googleUser = await this.$gAuth.signIn();
-        console.log(3);
+        console.log(2);
         if (googleUser) {
-          console.log(4);
-          console.log(this.$route);
+          console.log(3);
           this.gAccessToken = googleUser.getAuthResponse().access_token;
-          console.log(this.gAccessToken);
+          console.log(4);
           this.$store
             .dispatch('auth/sendAccessToken', {
               access_token: this.gAccessToken,
-              login_type: 'web2',
-              login_challenge: this.$route.query.login_challenge,
             })
-            .then((response) => {
+            .then((res) => {
               console.log(5);
-              window.location.replace(response.data.redirect_to);
+              this.$cookies.set(
+                'Token',
+                res.data.accessToken,
+                null,
+                null,
+                'https://cast.video.wiki'
+              );
+              this.$cookies.set(
+                'userId',
+                res.data.usersData.id,
+                null,
+                null,
+                'https://cast.video.wiki'
+              );
+              this.$cookies.set(
+                'Token',
+                res.data.accessToken,
+                null,
+                null,
+                'https://room.video.wiki'
+              );
+              this.$cookies.set(
+                'userId',
+                res.data.usersData.id,
+                null,
+                null,
+                'https://room.video.wiki'
+              );
+              console.log(6);
               this.$acl.change(this.activeUserInfo.userRole);
+              console.log(7);
               if (this.popup) this.$emit('loggedIn');
+              else this.$router.push('/');
+              this.$vs.loading.close();
             });
         } else {
-          console.log(6);
           this.$vs.notify({
             title: this.$t('Login.notify.title'),
             text: this.$t('GoogleLogin.notverified'),
@@ -94,11 +136,10 @@ export default {
           this.$vs.loading.close();
         }
       } catch (error) {
-        console.log(7);
         console.log(error, 'err');
         this.$vs.notify({
           title: this.$t('Login.notify.title'),
-          text: 'User not verified',
+          text: this.$t('GoogleLogin.signmessage'),
           iconPack: 'feather',
           icon: 'icon-alert-circle',
           color: 'danger',

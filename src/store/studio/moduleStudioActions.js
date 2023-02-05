@@ -113,7 +113,8 @@ export default {
         url: 'https://api.openai.com/v1/completions',
         headers: {
           'Content-Type': 'application/json',
-          Authorization: 'Bearer ' + constants.apiKey,
+          Authorization:
+            'Bearer '+constants.apiKey,
         },
         data: data,
       };
@@ -414,7 +415,6 @@ export default {
     commit('setInitialState');
   },
   postTxData({ commit }, payload) {
-    console.log(payload);
     return new Promise((resolve, reject) => {
       axios
         .post(constants.apiUrl + '/transaction/oceanbuy', payload)

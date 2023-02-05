@@ -91,17 +91,17 @@ export default {
   props: {
     steps: {
       required: true,
-      type: Array
-    }
+      type: Array,
+    },
   },
   watch: {
     '$route.path'() {
       this.$tours.vuexyTour.stop();
-    }
+    },
   },
   mounted() {
     this.$tours.vuexyTour.start();
-  }
+  },
 };
 </script>
 

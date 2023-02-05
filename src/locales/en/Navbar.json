@@ -1,8 +1,7 @@
 {
-    "videowiki": "VideoWiki",
-    "content": "Editor",
-    "chip": "CONTENT",
-    "create": "Events",
-    "class": "Rooms",
-    "login": "Login"
+    "videowiki":"VideoWiki",
+    "content":"Content",
+    "create":"CREATE",
+    "class":"Class",
+    "login":"Login"
 }

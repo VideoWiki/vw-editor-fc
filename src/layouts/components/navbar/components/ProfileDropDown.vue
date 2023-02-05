@@ -1,14 +1,29 @@
 <template>
   <div class="the-navbar__user-meta flex items-center">
+    <!--div class="text-right leading-tight hidden sm:block">
+      <p class="font-semibold">{{ activeUserInfo.displayName }}</p>
+      <small>Available</small>
+    </div-->
+
     <vs-dropdown vs-custom-content vs-trigger-click class="cursor-pointer">
       <div class="flex items-center">
         <vs-icon icon-pack="feather" icon="icon icon-chevron-down" />
         <div class="con-img ml-3">
+          <!--img
+            key="onlineImg"
+            :src="activeUserInfo.profile_image"
+            alt="user-img"
+            width="40"
+            height="40"
+            class="rounded-full shadow-md cursor-pointer block user-img-icon"
+          /-->
           <vs-avatar
             :text="getFirstLetter(activeUserInfo.first_name)"
             color="primary"
             class="m-0 shadow-md"
-            :src="activeUserInfo.profile_pic ? activeUserInfo.profile_pic : ''"
+            :src="
+              activeUserInfo.profile_image ? activeUserInfo.profile_image : ''
+            "
             size="40px"
           />
         </div>
@@ -194,7 +209,7 @@ export default {
       this.$cookies.remove('userId');
       this.$cookies.remove('Token');
 
-      // localStorage.clear();
+      localStorage.clear();
       return this.$store.dispatch('auth/logOut');
     },
   },

@@ -1,7 +1,13 @@
 <template>
   <div>
     <template v-if="sourceUrlExists">
-      <video width="100%" height="auto" controls :id="`video_${sceneIndex}`">
+      <video
+        crossorigin="anonymous"
+        width="100%"
+        height="auto"
+        controls
+        :id="`video_${sceneIndex}`"
+      >
         <source
           v-show="$options.PRIORITY[currentPanel] >= $options.PRIORITY.SOUND"
           :src="selectedMedia[sceneIndex].versions[SCENE_VERSION.AUDIO]"
@@ -22,6 +28,7 @@
     <template v-else>
       <video
         v-if="selectedMedia[sceneIndex].type === $options.MEDIA_TYPES.VIDEO"
+        crossorigin="anonymous"
         width="100%"
         height="auto"
         controls
@@ -49,12 +56,12 @@ export default {
   PRIORITY,
   props: {
     currentPanel: {
-      type: String
+      type: String,
     },
     sceneIndex: {
       type: Number,
-      required: true
-    }
+      required: true,
+    },
   },
   computed: {
     selectedMedia() {
@@ -66,7 +73,7 @@ export default {
         this.selectedMedia[this.sceneIndex].versions[SCENE_VERSION.SUBTITLE] ||
         this.selectedMedia[this.sceneIndex].versions[SCENE_VERSION.ANIMATION]
       );
-    }
-  }
+    },
+  },
 };
 </script>
