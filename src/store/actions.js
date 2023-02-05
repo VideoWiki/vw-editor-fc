@@ -808,8 +808,14 @@ const actions = {
     const metadata = {
       title,
       description,
-      url,
     };
+    const response = await fetch(url);
+    const contentType = response.headers.get('content-type');
+    const blob = await response.blob();
+    const file = new File([blob], 'preview.webm', { contentType });
+    const videoFile = new File([file], 'preview.webm');
+    const videoCID = await client.put([videoFile]);
+    metadata.url = `https://${videoCID}.ipfs.w3s.link/preview.webm`;
     const BLOB = new Blob([JSON.stringify(metadata)], {
       type: 'application/json',
     });
@@ -825,7 +831,6 @@ const actions = {
     });
     if (payload.url) {
       const url = await actions.getVideoMetadataUrl(client, payload);
-      console.log(url);
       return url;
     }
     const RES = await actions.getPreviewUrl(client, payload);
@@ -877,7 +882,6 @@ const actions = {
     await tx.wait();
   },
   async ownerOfVideo(payload) {
-    console.log(payload);
     // pass a signer to create a contract instance for state changing operations
     const provider = new ethers.providers.Web3Provider(window.ethereum);
     const abi = payload.abi;
@@ -885,9 +889,7 @@ const actions = {
     const contract = new ethers.Contract(contractAddress, abi, provider);
 
     const _tokenId = payload.tokenId;
-    console.log(payload.contractAddress);
     const tx = await contract.ownerOf(_tokenId);
-    console.log(tx);
 
     return tx === payload.walletAddress;
   },
