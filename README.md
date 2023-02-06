@@ -14,11 +14,11 @@ Too much theory makes the whole environment boring.
 
 These issues leads to the development of a Platform called VideoWiki which enhances the online learning techniques to the most to make more interesting and practical.
 
-## Why are we using it on OceanMarket?
+## Why are we using it on Filecoin Marketplace?
 
 
 
-We are using it on OceanMarket so as to decentralised VideoWiki.
+We are using it on Filecoin so as to decentralised VideoWiki.
 
 
 ## Features of VideoWiki
@@ -78,7 +78,7 @@ For PAID publishing-
 Firstly. Connect your wallet . use **Filecoin- Hyperspace Testnet** network which has a currency TFIL.
 It will be published on **Filecoin IPFS storage** the video as a nft and user can mint it also.
 
-![publish_polygon4](https://user-images.githubusercontent.com/97036824/212144708-75e9c4e4-beb2-4560-8bb3-1ecee146d408.png)
+![scr1](https://user-images.githubusercontent.com/76862170/217029246-044593ad-93b5-481b-9b3b-1f10ac73871d.png)
 
 
 ![connected_to_metaMask](https://user-images.githubusercontent.com/97036824/211392106-5e66c17e-3904-4292-8a1c-0dc468a0969c.png)
@@ -90,7 +90,7 @@ Then click on video access and publish it. This will go through three steps in t
 
 
 
-After Publish, this will generate a short preview in background on IPFS using web3.storage package which will locked.
+After Publish, this will generate a short **preview in background on IPFS using web3.storage** package which will locked.
 
 End User can have two options: BUY or PREVIEW to the previews on the dashboard.
 On the dashboard, some videos are locked and can be accessed only when the User buy it.
@@ -102,12 +102,10 @@ Another option i.e. PREVIEW will show us the locked short previews which is to b
 
 
 Following is the short preview video using Livepeer's IPFS playback Tool which EndUser can see before BUY it.
-Here, we are publishing through ocean, so it contains ENS name and AVATAR.
 
 ![preview_avatar_ENS](https://user-images.githubusercontent.com/97036824/211392487-ca099930-34dc-406b-a842-3907ccb40d59.jpeg)
 
 
- This contains Users ENS name and avatar also on the Right hand side.
  ## 
  ### 2. ROOM
 
