@@ -92,9 +92,9 @@ export default {
         ],
         Buy: [
           {
-            title: 'Approving OCEAN and ordering asset',
+            title: 'Approving Filecoin and ordering asset',
             description:
-              'We need your permission so that we can exchange your OCEAN tokens for the datatokens',
+              'We need your permission so that we can exchange your Filecoin ether for the url',
             success: 'Approved',
           },
         ],
